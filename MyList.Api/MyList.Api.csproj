@@ -4,5 +4,22 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyList.Data.Database\MyList.Data.Database.csproj" />
+    <ProjectReference Include="..\MyList.Data.Repository\MyList.Data.Repository.csproj" />
+    <ProjectReference Include="..\MyList.List.Handlers\MyList.List.Handlers.csproj" />
+    <ProjectReference Include="..\MyList.List.Requests\MyList.List.Requests.csproj" />
+  </ItemGroup>
+
 
 </Project>
