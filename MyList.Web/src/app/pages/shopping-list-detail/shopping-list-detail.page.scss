@@ -1,0 +1,31 @@
+.container {
+  margin: 5%;
+}
+
+.add-item-form-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .add-item-form {
+    display: flex;
+    width: 85%;
+
+    .add-item-form-field {
+      width: 100%;
+    }
+
+    .save-new-item-button {
+      margin: 2%;
+    }
+  }
+}
+
+.list-item {
+  display: flex;
+  justify-content: flex-end;
+
+  .action-buttons{
+    display: flex;
+  }
+}

@@ -1,0 +1,26 @@
+.card {
+  margin: 5%;
+}
+
+.add-list-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5%;
+
+  .add-list-form{
+    width: 85%;
+
+    .add-form-card {
+      display: flex;
+
+      .add-form {
+        width: 100%;
+      }
+
+      .save-button {
+        margin: 3% 2%;
+      }
+    }
+  }
+}

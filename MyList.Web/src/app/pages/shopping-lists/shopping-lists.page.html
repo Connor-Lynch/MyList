@@ -1,0 +1,24 @@
+<div class="add-list-container">
+  <button mat-fab [color]="addNewList ? 'warn' : 'primary'" (click)="toggleListAdd()" id="add-list-button">
+    <mat-icon>{{ addNewList ? 'close' : 'add' }}</mat-icon>
+  </button>
+
+  <mat-card *ngIf="addNewList" class="add-list-form">
+    <mat-card-title class="add-form-card">
+      <mat-form-field class="add-form">
+        <mat-label>List Name</mat-label>
+        <input matInput placeholder="New List" [(ngModel)]="newListName" class="list-name-input">
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="saveNewList()" class="save-button">Save</button>
+    </mat-card-title>
+  </mat-card>
+</div>
+
+<mat-card *ngFor="let shoppingList of shoppingLists$ | async" class="card">
+  <mat-card-title id="list-name">{{ shoppingList.name }}</mat-card-title>
+  <mat-card-content>{{ shoppingList.items.length }} item(s) in list</mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" [routerLink]="['/shopping-list-detail', shoppingList.id]" id="view-button">View</button>
+    <button mat-raised-button color="warn" (click)="deleteShoppingList(shoppingList.id)" id="delete-button">Delete</button>
+  </mat-card-actions>
+</mat-card>

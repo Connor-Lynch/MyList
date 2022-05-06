@@ -18,14 +18,14 @@ namespace MyList.Api.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddList([FromBody] AddShoppingListItemCommand command)
+        public async Task<IActionResult> AddListItem([FromBody] AddShoppingListItemCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateList([FromBody] ShoppingListItem item)
+        public async Task<IActionResult> UpdateListItem([FromBody] ShoppingListItem item)
         {
             var command = new UpdateShoppingListItemCommand() 
             { 
@@ -37,7 +37,7 @@ namespace MyList.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> DeleteList(Guid id)
+        public async Task<IActionResult> DeleteListItem(Guid id)
         {
             var command = new DeleteShoppingListItemCommand()
             {
