@@ -8,6 +8,7 @@ namespace MyList.TestHelpers
     public class ShoppingListItemBuilder
     {
         private Guid _id = Guid.NewGuid();
+        private Guid _shoppingListId = Guid.NewGuid();
         private string _name = "DefaultItemName";
 
         public ShoppingListItemBuilder()
@@ -24,6 +25,12 @@ namespace MyList.TestHelpers
             return this;
         }
 
+        public ShoppingListItemBuilder WithIdShoppingListID(Guid id)
+        {
+            _shoppingListId = id;
+            return this;
+        }
+
         public ShoppingListItemBuilder WithName(string name)
         {
             _name = name;
@@ -35,6 +42,7 @@ namespace MyList.TestHelpers
             return new ShoppingListItem() 
             { 
                 Id = _id,
+                ShoppingListId = _shoppingListId,
                 Name = _name
             };
         }

@@ -38,10 +38,10 @@ namespace MyList.Data.Repository.Tests
 
             SeedMany(shoppingListsToSeed);
 
-            var shoppingLists = _repository.GetAll();
+            var result = _repository.GetAll();
 
-            Assert.IsInstanceOfType(shoppingLists, typeof(IQueryable<ShoppingList>));
-            Assert.AreEqual(shoppingLists.Count(), 2);
+            Assert.IsInstanceOfType(result, typeof(IQueryable<ShoppingList>));
+            Assert.AreEqual(result.Count(), 2);
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace MyList.Data.Repository.Tests
             var result = _repository.GetAll();
 
             Assert.IsInstanceOfType(result.First().Items, typeof(List<ShoppingListItem>));
-            Assert.IsTrue(result.First().Items.Count() > 0);
+            Assert.AreEqual(result.First().Items.Count(), 1);
         }
 
         [TestMethod]
@@ -95,18 +95,47 @@ namespace MyList.Data.Repository.Tests
             var result = await _repository.GetById(expectedShoppingListResult.Id);
 
             Assert.IsInstanceOfType(result.Items, typeof(List<ShoppingListItem>));
-            Assert.IsTrue(result.Items.Count() > 0);
+            Assert.AreEqual(result.Items.Count(), 1);
         }
 
         [TestMethod]
-        public async Task UpdateShouldUpdateShoppingList()
+        public async Task AddShouldAddShoppingList()
+        {
+            var shoppingList = ShoppingListBuilder.Create().Build();
+            
+            var result = _repository.Add(shoppingList);
+            _context.SaveChanges();
+
+            var newShoppingListInReop = await _context.ShoppingLists.SingleOrDefaultAsync(l => l.Id == shoppingList.Id);
+
+            Assert.AreEqual(shoppingList, result);
+            Assert.AreEqual(shoppingList, newShoppingListInReop);
+        }
+
+        [TestMethod]
+        public async Task AddShouldAddShoppingListWithItems()
+        {
+            var shoppingList = ShoppingListBuilder.Create().Build();
+
+            var result = _repository.Add(shoppingList);
+            _context.SaveChanges();
+
+            var newShoppingListInReop = await _context.ShoppingLists.SingleOrDefaultAsync(l => l.Id == shoppingList.Id);
+
+            Assert.IsInstanceOfType(result.Items, typeof(List<ShoppingListItem>));
+            Assert.AreEqual(result.Items.Count(), 1);
+            Assert.AreEqual(newShoppingListInReop.Items.Count(), 1);
+        }
+
+        [TestMethod]
+        public async Task UpdateNameShouldUpdateShoppingList()
         {
             var shoppingList = ShoppingListBuilder.Create().Build();
             Seed(shoppingList);
 
             shoppingList.Name = "UpdatedName";
 
-            var result = _repository.Update(shoppingList);
+            var result = await _repository.UpdateName(shoppingList.Id, shoppingList.Name);
             _context.SaveChanges();
 
             var updatedShoppingListInRepository = await _context.ShoppingLists.SingleOrDefaultAsync(l => l.Id == shoppingList.Id);
@@ -117,18 +146,18 @@ namespace MyList.Data.Repository.Tests
         }
 
         [TestMethod]
-        public async Task UpdateShouldUpdateShoppingListWithItems()
+        public async Task UpdateNameShouldUpdateShoppingListAndNotEffectItems()
         {
             var shoppingList = ShoppingListBuilder.Create().Build();
             Seed(shoppingList);
 
             shoppingList.Name = "UpdatedName";
 
-            var result = _repository.Update(shoppingList);
+            var result = await _repository.UpdateName(shoppingList.Id, shoppingList.Name);
             _context.SaveChanges();
 
             Assert.IsInstanceOfType(result.Items, typeof(List<ShoppingListItem>));
-            Assert.IsTrue(result.Items.Count() > 0);
+            Assert.AreEqual(result.Items.Count(), 1);
         }
 
         [TestMethod]
@@ -144,6 +173,25 @@ namespace MyList.Data.Repository.Tests
 
             Assert.AreEqual(shoppingList, result);
             Assert.IsNull(removedShoppingListInRepo);
+        }
+
+        [TestMethod]
+        public async Task DeleteShouldRemoveShoppingListItem()
+        {
+            var shoppingListItem = ShoppingListItemBuilder.Create().Build();
+            var shoppingList = ShoppingListBuilder.Create()
+                .WithId(shoppingListItem.ShoppingListId)
+                .WithItems(new List<ShoppingListItem>() { shoppingListItem })
+                .Build();
+
+            Seed(shoppingList);
+
+            var result = await _repository.Delete(shoppingList.Id);
+            _context.SaveChanges();
+
+            var removedShoppingListItemInRepo = await _context.ShoppingListItems.SingleOrDefaultAsync(i => i.Id == shoppingListItem.Id);
+
+            Assert.IsNull(removedShoppingListItemInRepo);
         }
 
         [TestMethod]

@@ -6,9 +6,8 @@ using System.Text;
 
 namespace MyList.List.Requests.Commands
 {
-    public class UpdateShoppingListCommand : IRequest<ShoppingList>
+    public class UpdateShoppingListItemCommand : IRequest<ShoppingList>
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        public ShoppingListItem Item { get; set; }
     }
 }

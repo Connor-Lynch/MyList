@@ -7,6 +7,7 @@ namespace MyList.Entity
     public class ShoppingListItem
     {
         public Guid Id { get; set; }
+        public Guid ShoppingListId { get; set; }
         public string Name { get; set; }
 
         public ShoppingListItem()

@@ -10,8 +10,8 @@ using MyList.Data.Database;
 namespace MyList.Data.Database.Migrations
 {
     [DbContext(typeof(MyListContext))]
-    [Migration("20220504204119_RemovedExplicitShoppingListIdFromItm")]
-    partial class RemovedExplicitShoppingListIdFromItm
+    [Migration("20220506025941_AddedItemsToShoppingList")]
+    partial class AddedItemsToShoppingList
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,7 +47,7 @@ namespace MyList.Data.Database.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ShoppingListId")
+                    b.Property<Guid>("ShoppingListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -61,7 +61,9 @@ namespace MyList.Data.Database.Migrations
                 {
                     b.HasOne("MyList.Entity.ShoppingList", null)
                         .WithMany("Items")
-                        .HasForeignKey("ShoppingListId");
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

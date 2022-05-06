@@ -63,6 +63,7 @@ namespace MyList.Api
         {
             services.AddScoped<IUnitOfWork, MyListContext>();
             services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
+            services.AddScoped<IShoppingListItemRepository, ShoppingListItemRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +79,13 @@ namespace MyList.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //ToDo: Revisit Cors Orgin
+            //var allowedOrigins = Configuration.GetValue<string>("AllowedOrigins");
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
 
             app.UseEndpoints(endpoints =>
             {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyList.Data.Database.Migrations
 {
-    public partial class AddedItemsToLists : Migration
+    public partial class AddedItemsToShoppingList : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,8 +12,8 @@ namespace MyList.Data.Database.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    ShoppingListId = table.Column<Guid>(nullable: true)
+                    ShoppingListId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -23,7 +23,7 @@ namespace MyList.Data.Database.Migrations
                         column: x => x.ShoppingListId,
                         principalTable: "ShoppingLists",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

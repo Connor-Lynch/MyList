@@ -2,9 +2,6 @@
 using MyList.Entity;
 using MyList.Entity.Interfaces;
 using MyList.List.Requests.Commands;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +18,7 @@ namespace MyList.List.Handlers
 
         public async Task<ShoppingList> Handle(UpdateShoppingListCommand request, CancellationToken cancellationToken)
         {
-            var updatedShoppingList = await _shoppingListRepository.Update(request.Id, request.Name, request.Items);
+            var updatedShoppingList = await _shoppingListRepository.UpdateName(request.Id, request.Name);
 
             await _shoppingListRepository.UnitOfWork.SaveEntitiesAsync();
 

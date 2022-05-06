@@ -45,7 +45,7 @@ namespace MyList.Data.Database.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ShoppingListId")
+                    b.Property<Guid>("ShoppingListId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -59,7 +59,9 @@ namespace MyList.Data.Database.Migrations
                 {
                     b.HasOne("MyList.Entity.ShoppingList", null)
                         .WithMany("Items")
-                        .HasForeignKey("ShoppingListId");
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MyList.Entity;
 using MyList.List.Requests.Commands;
 using MyList.List.Requests.Requests;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyList.Api.Controllers
@@ -40,21 +38,21 @@ namespace MyList.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("/Add")]
+        [HttpPost("Add")]
         public async Task<IActionResult> AddList([FromBody] AddShoppingListCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpPut("/Update")]
+        [HttpPut("Update")]
         public async Task<IActionResult> UpdateList([FromBody] UpdateShoppingListCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
-        [HttpDelete("/Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteList(Guid id)
         {
             var command = new DeleteShoppingListCommand()

@@ -33,14 +33,13 @@ namespace MyList.List.Handlers.Tests
 
             var shoppingList = ShoppingListBuilder.Create().Build();
             
-            _shoppingListRepository.Setup(r => r.Update(shoppingList.Id, shoppingList.Name, shoppingList.Items)).ReturnsAsync(shoppingList);
+            _shoppingListRepository.Setup(r => r.UpdateName(shoppingList.Id, shoppingList.Name)).ReturnsAsync(shoppingList);
             _shoppingListRepository.Setup(s => s.UnitOfWork).Returns(_unitOfWork.Object);
 
             _command = new UpdateShoppingListCommand()
             {
                 Id = shoppingList.Id,
-                Name = shoppingList.Name,
-                Items = shoppingList.Items
+                Name = shoppingList.Name
             };
             _handler = new UpdateShoppingListCommandHandler(_shoppingListRepository.Object);
         }
@@ -58,7 +57,7 @@ namespace MyList.List.Handlers.Tests
         {
             var result = await _handler.Handle(_command, new CancellationToken());
 
-            _shoppingListRepository.Verify(r => r.Update(It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<List<ShoppingListItem>>()), Times.Once);
+            _shoppingListRepository.Verify(r => r.UpdateName(It.IsAny<Guid>(), It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]

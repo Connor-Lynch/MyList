@@ -7,21 +7,19 @@ using MyList.Entity.Interfaces;
 using MyList.List.Requests.Commands;
 using MyList.TestHelpers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyList.List.Handlers.Tests
 {
     [TestClass]
-    public class AddShoppingListCommandHandlerTests
+    public class DeleteShoppingListCommandHandlerTests
     {
         private Mock<IShoppingListRepository> _shoppingListRepository;
         private Mock<IUnitOfWork> _unitOfWork;
 
-        private AddShoppingListCommandHandler _handler;
-        private AddShoppingListCommand _command;
+        private DeleteShoppingListCommandHandler _handler;
+        private DeleteShoppingListCommand _command;
 
         [TestInitialize]
         public void InIt()
@@ -31,20 +29,20 @@ namespace MyList.List.Handlers.Tests
             _shoppingListRepository = new Mock<IShoppingListRepository>();
             _unitOfWork = new Mock<IUnitOfWork>();
 
-            var newShoppingList = ShoppingListBuilder.Create().Build();
+            var shoppingList = ShoppingListBuilder.Create().Build();
             
-            _shoppingListRepository.Setup(r => r.Add(It.IsAny<ShoppingList>())).Returns(newShoppingList);
+            _shoppingListRepository.Setup(r => r.Delete(shoppingList.Id)).ReturnsAsync(shoppingList);
             _shoppingListRepository.Setup(s => s.UnitOfWork).Returns(_unitOfWork.Object);
 
-            _command = new AddShoppingListCommand()
+            _command = new DeleteShoppingListCommand()
             {
-                Name = newShoppingList.Name
+                Id = shoppingList.Id
             };
-            _handler = new AddShoppingListCommandHandler(_shoppingListRepository.Object);
+            _handler = new DeleteShoppingListCommandHandler(_shoppingListRepository.Object);
         }
 
         [TestMethod]
-        public async Task HandlerShouldAddANewShoppingListAndReturnIt()
+        public async Task HandlerShouldDeleteShoppingListAndReturnIt()
         {
             var result = await _handler.Handle(_command, new CancellationToken());
 
@@ -52,11 +50,11 @@ namespace MyList.List.Handlers.Tests
         }
 
         [TestMethod]
-        public async Task HandlerShouldAddANewShoppingListToShoppingListRepository()
+        public async Task HandlerShouldDeleteShoppingListInShoppingListRepository()
         {
             var result = await _handler.Handle(_command, new CancellationToken());
 
-            _shoppingListRepository.Verify(r => r.Add(It.IsAny<ShoppingList>()), Times.Once);
+            _shoppingListRepository.Verify(r => r.Delete(It.IsAny<Guid>()), Times.Once);
         }
 
         [TestMethod]

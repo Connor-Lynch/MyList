@@ -12,7 +12,7 @@ namespace MyList.Entity.Interfaces
         IQueryable<ShoppingList> GetAll();
         ShoppingList Add(ShoppingList list);
         Task<ShoppingList> GetById(Guid id);
-        Task<ShoppingList> Update(Guid id, string name, List<ShoppingListItem> items);
+        Task<ShoppingList> UpdateName(Guid id, string name);
         Task<ShoppingList> Delete(Guid id);
     }
 }

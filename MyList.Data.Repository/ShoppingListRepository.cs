@@ -22,13 +22,6 @@ namespace MyList.Data.Repository
                 .Include(s => s.Items);
         }
 
-        public ShoppingList Add(ShoppingList list)
-        {
-            var result = _context.ShoppingLists.Add(list);
-
-            return result.Entity;
-        }
-
         public Task<ShoppingList?> GetById(Guid id)
         {
             var result = _context.ShoppingLists.Where(l => l.Id == id)
@@ -38,21 +31,23 @@ namespace MyList.Data.Repository
             return result;
         }
 
-        public ShoppingList Update(ShoppingList list)
+        public ShoppingList Add(ShoppingList list)
         {
-            return _context.ShoppingLists
-                .Update(list)
-                .Entity;
+            var result = _context.ShoppingLists.Add(list);
+
+            return result.Entity;
         }
 
-        public async Task<ShoppingList> Update(Guid id, string name, List<ShoppingListItem> items)
+        public async Task<ShoppingList> UpdateName(Guid id, string name)
         {
             var shoppingList = await _context.ShoppingLists
-                .Where(l => l.Id == id).FirstOrDefaultAsync();
+                .Where(l => l.Id == id)
+                .Include(l => l.Items)
+                .SingleOrDefaultAsync();
+
             if (shoppingList != null)
             {
                 shoppingList.Name = name;
-                shoppingList.Items = items;
             }
 
             return shoppingList;
@@ -61,17 +56,18 @@ namespace MyList.Data.Repository
         public async Task<ShoppingList> Delete(Guid id)
         {
             var listToRemove = await _context.ShoppingLists
-                .Where(l => l.Id == id).FirstOrDefaultAsync();
+                .Where(l => l.Id == id)
+                .Include(l => l.Items)
+                .SingleOrDefaultAsync();
+
             if (listToRemove != null)
             {
                 return _context.ShoppingLists
                     .Remove(listToRemove)
                     .Entity;
             }
-            else
-            {
-                return listToRemove;
-            }
+
+            return listToRemove;
         }
     }
 }
