@@ -21,9 +21,6 @@ describe('ShoppingListDetailComponent', () => {
     getShoppingListById() { return of(mockShoppingList) }
   }
   const mockShoppingListItemService = {
-    addShoppingListItem() { return of(mockShoppingList) },
-    updateShoppingListItem() { return of(mockShoppingList) },
-    removeShoppingListItem() { return of(mockShoppingList) }
   }
 
   beforeEach(async () => {
@@ -56,127 +53,81 @@ describe('ShoppingListDetailComponent', () => {
   });
 
   it('should display item', () => {
-    const item = de.query(By.css('#item'));
+    const item = de.query(By.css('.list-item'));
 
     expect(item).toBeTruthy();
   });
 
-  it('should have an edit button on item', () => {
-    const editItemButton = de.query(By.css('#edit-item-button'));
+  it('should show item actions when item is selected', () => {
+    const itemToSelect = de.query(By.css('.selectable-item'));
 
-    expect(editItemButton).toBeTruthy();
+    itemToSelect.triggerEventHandler('click', {});
+
+    const itemActions = de.query(By.css('.item-actions'));
+
+    expect(itemActions).toBeTruthy();
   });
 
-  it('should have a delete button on item', () => {
-    const deleteItemButton = de.query(By.css('#delete-item-button'));
+  it('should show add item component', () => {
+    const addItem = de.query(By.css('.add-item'));
 
-    expect(deleteItemButton).toBeTruthy();
+    expect(addItem).toBeTruthy();
   });
 
-  it('should have an add item button', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+  it('should set selectedItem when and item is clicked', () => {
+    const itemInList = de.query(By.css('.selectable-item'));
 
-    expect(addItemButton).toBeTruthy();
-  });
-
-  it('should show add form when add item button is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
-    let addItemForm = de.query(By.css('.add-item-form'));
-
-    expect(addItemForm).toBeFalsy();
-
-    addItemButton.triggerEventHandler('click', {});
+    itemInList.triggerEventHandler('click', {});
     fixture.detectChanges();
 
-    addItemForm = de.query(By.css('.add-item-form'));
-
-    expect(addItemForm).toBeTruthy();
+    expect(component.selectedItem).toEqual(mockShoppingListItem);
   });
 
-  it('should hide the add form when add item button is clicked twice', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
-
-    addItemButton.triggerEventHandler('click', {});
+  it('should unselect item when it is clicked twice', () => {
+    let itemInList = de.query(By.css('.selectable-item'));
+    itemInList.triggerEventHandler('click', {});
     fixture.detectChanges();
 
-    let addItemForm = de.query(By.css('.add-item-form'));
+    expect(component.selectedItem).toEqual(mockShoppingListItem);
 
-    expect(addItemForm).toBeTruthy();
-
-    addItemButton.triggerEventHandler('click', {});
+    itemInList = de.query(By.css('.selectable-item'));
+    itemInList.triggerEventHandler('click', {});
     fixture.detectChanges();
 
-    addItemForm = de.query(By.css('.add-item-form'));
-
-    expect(addItemForm).toBeFalsy();
+    expect(component.selectedItem).toEqual(null);
   });
 
-  it('should call service when add is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
-
-    addItemButton.triggerEventHandler('click', {});
-    fixture.detectChanges();
-
-    const saveButton = de.query(By.css('.save-new-item-button'));
-    const serviceSpy = spyOn(component.shoppingListItemService, 'addShoppingListItem');
-
-    saveButton.triggerEventHandler('click', {});
-
-    expect(serviceSpy).toHaveBeenCalled();
-  });
-
-  it('should call service when delete is clicked', () => {
-    const deleteButton = de.query(By.css('#delete-item-button'));
-    const serviceSpy = spyOn(component.shoppingListItemService, 'removeShoppingListItem');
-
-    deleteButton.triggerEventHandler('click', {});
-
-    expect(serviceSpy).toHaveBeenCalledWith('1');
-  });
-
-  it('should show edit form when edit item button is clicked', () => {
-    const editItemButton = de.query(By.css('#edit-item-button'));
-    let editItemForm = de.query(By.css('#edit-item-form'));
+  it('should show edit form when item under edit is set', () => {
+    let editItemForm = de.query(By.css('.edit-item-form'));
 
     expect(editItemForm).toBeFalsy();
 
-    editItemButton.triggerEventHandler('click', {});
+    component.selectedItem = mockShoppingListItem;
+    component.itemUnderEdit('1');
     fixture.detectChanges();
 
-    editItemForm = de.query(By.css('#edit-item-form'));
+    editItemForm = de.query(By.css('.edit-item-form'));
 
     expect(editItemForm).toBeTruthy();
   });
 
-  it('should hide the edit form when cancel item edit button is clicked', () => {
-    const editItemButton = de.query(By.css('#edit-item-button'));
-    editItemButton.triggerEventHandler('click', {});
-    fixture.detectChanges();
+  it('should set selectedItem and editItemId to null item is no longer under edit', () => {
+    component.selectedItem = mockShoppingListItem;
+    component.itemUnderEditId = mockShoppingListItem.id;
 
-    let editItemForm = de.query(By.css('#edit-item-form'));
+    component.editEvent(false);
 
-    expect(editItemForm).toBeTruthy();
-
-    const cancelEditItemButton = de.query(By.css('#cancel-item-edit-button'));
-    cancelEditItemButton.triggerEventHandler('click', {});
-    fixture.detectChanges();
-
-    editItemForm = de.query(By.css('#edit-item-form'));
-
-    expect(editItemForm).toBeFalsy();
+    expect(component.selectedItem).toBeNull();
+    expect(component.itemUnderEditId).toBeNull();
   });
 
-  it('should call service when save edit is clicked', () => {
-    const editItemButton = de.query(By.css('#edit-item-button'));
+  it('should not allow item selection when item is being added', () => {
+    component.editEvent(true);
 
-    editItemButton.triggerEventHandler('click', {});
+    let itemInList = de.query(By.css('.selectable-item'));
+    itemInList.triggerEventHandler('click', {});
     fixture.detectChanges();
 
-    const saveButton = de.query(By.css('#save-item-button'));
-    const serviceSpy = spyOn(component.shoppingListItemService, 'updateShoppingListItem');
-
-    saveButton.triggerEventHandler('click', {});
-
-    expect(serviceSpy).toHaveBeenCalled();
+    expect(component.selectedItem).not.toEqual(mockShoppingListItem);
   });
 });

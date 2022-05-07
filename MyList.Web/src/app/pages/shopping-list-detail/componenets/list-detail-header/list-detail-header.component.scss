@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .edit-name-form {
+    width: 75%;
+
+    .form-input{
+      font-size: 2em;
+    }
+  }
+}

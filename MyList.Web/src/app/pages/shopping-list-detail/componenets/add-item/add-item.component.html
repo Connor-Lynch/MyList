@@ -1,0 +1,19 @@
+<div *ngIf="addNewItem" class="list-item">
+  <mat-checkbox disabled="true"></mat-checkbox>
+  <mat-form-field class="add-item-form">
+    <input matInput [(ngModel)]="newItemName">
+  </mat-form-field>
+  <div class="actions">
+    <button mat-icon-button color="warn" (click)="toggleAddNewItem()" id="cancel-add-button">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button mat-icon-button color="primary" (click)="saveItem()" id="save-item-button">
+      <mat-icon>check</mat-icon>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="!addNewItem" class="new-add-section" (click)="!externalEditInProgress && toggleAddNewItem()" id="add-item-button">
+  <mat-icon>add</mat-icon>
+  <p>Add Item</p>
+</div>

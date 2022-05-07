@@ -1,46 +1,37 @@
 <div *ngIf="(this.shoppingList$ | async) as shoppingList" class="container">
-  <h1>{{ shoppingList.name }}</h1>
-  <mat-divider></mat-divider>
+  <app-list-detail-header
+    [externalEditInProgress]="editInProgress"
+    [shoppingList]="shoppingList"
+    (headerBeingEditedEvent)="editEvent($event)"
+    (shoppingListUpdatedEvent)="shoppingListUpdated($event)">
+  </app-list-detail-header>
 
-  <div class="add-item-form-container">
-    <button mat-fab [color]="addNewItem ? 'warn' : 'primary'"(click)="toggleAddNewItem()" id="add-item-button">
-      <mat-icon>{{ addNewItem ? 'close' : 'add' }}</mat-icon>
-    </button>
-    <div *ngIf="addNewItem" class="add-item-form">
-      <mat-form-field class="add-item-form-field">
-        <mat-label>Item Name</mat-label>
-        <input matInput placeholder="New Item" [(ngModel)]="newItemName">
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="saveNewItem()" class="save-new-item-button">Save</button>
-    </div>
-  </div>
-
-  <mat-list *ngFor="let item of shoppingList.items" id="item">
-    <div class="list-item">
+  <mat-list>
+    <div *ngFor="let item of shoppingList.items" class="list-item" >
       <mat-list-item>
-        <mat-checkbox *ngIf="item.id !== editItemId" class="example-margin">{{ item.name }}</mat-checkbox>
-        <mat-form-field *ngIf="item.id === editItemId" id="edit-item-form">
-          <input matInput [(ngModel)]="editItemNewValue">
-        </mat-form-field>
+        <mat-checkbox></mat-checkbox>
+        <div class="list-item-content">
+          <p *ngIf="item.id !== itemUnderEditId" (click)="itemSelected(item.id)" class="selectable-item">{{ item.name }}</p>
+          <mat-form-field *ngIf="item.id === itemUnderEditId" class="edit-item-form">
+            <input matInput [(ngModel)]="selectedItem.name">
+          </mat-form-field>
+        </div>
+        <app-item-actions class="item-actions"
+          [item]="item"
+          [selectedItem]="selectedItem"
+          [shoppingList$]="shoppingList$"
+          (itemUnselectedEvent)="editEvent(false)"
+          (itemUnderEditEvent)="itemUnderEdit($event)"
+          (shoppingListUpdatedEvent)="shoppingListUpdated($event)">
+        </app-item-actions>
       </mat-list-item>
-      <div *ngIf="item.id !== editItemId" class="action-buttons">
-        <button mat-icon-button color="primary" (click)="toggleEditItem(item.id)" id="edit-item-button">
-        <!-- <button mat-icon-button color="primary" id="edit-item-button"> -->
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteItem(item.id)" id="delete-item-button">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-      <div *ngIf="item.id === editItemId" class="action-buttons">
-        <button mat-icon-button color="warn" (click)="toggleEditItem(item.id)" id="cancel-item-edit-button">
-          <mat-icon>cancel</mat-icon>
-        </button>
-        <button mat-icon-button color="primary" (click)="saveEditItem()" id="save-item-button">
-          <mat-icon>save</mat-icon>
-        </button>
-
-      </div>
     </div>
+    <mat-list-item>
+      <app-add-item class="add-item"
+        [externalEditInProgress]="editInProgress"
+        (itemBeingAddedEvent)="editEvent($event)"
+        (shoppingListUpdatedEvent)="shoppingListUpdated($event)">
+      </app-add-item>
+    </mat-list-item>
   </mat-list>
 </div>

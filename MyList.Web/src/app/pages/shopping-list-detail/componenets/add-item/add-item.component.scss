@@ -1,0 +1,28 @@
+.list-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .add-item-form {
+    width: 75%;
+    padding-left: 5%;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 25%;
+  }
+}
+
+.new-add-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  p {
+    padding-left: 2%;
+    margin-bottom: 0%;
+  }
+}

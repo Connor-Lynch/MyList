@@ -1,0 +1,22 @@
+<div class="container">
+  <div *ngIf="!isEditingName" class="header">
+    <h1>{{ shoppingList.name }}</h1>
+    <button mat-icon-button color="primary" [disabled]="externalEditInProgress" (click)="editListName()" id="edit-button">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="isEditingName" class="header">
+    <mat-form-field class="edit-name-form">
+      <input matInput [(ngModel)]="newName" class="form-input">
+    </mat-form-field>
+    <div>
+      <button mat-icon-button color="warn" (click)="editListName()" id="cancel-button">
+        <mat-icon>close</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" (click)="saveEdit()" id="save-button">
+        <mat-icon>check</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<mat-divider></mat-divider>

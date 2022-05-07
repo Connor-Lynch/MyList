@@ -2,30 +2,30 @@
   margin: 5%;
 }
 
-.add-item-form-container {
+.list-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 
-  .add-item-form {
-    display: flex;
-    width: 85%;
+  .list-item-content{
+    width: 75%;
+    padding-left: 5%;
 
-    .add-item-form-field {
+    .selectable-item {
+      cursor: pointer;
+      margin-bottom: 0%;
+    }
+
+    .edit-item-form {
       width: 100%;
     }
+  }
 
-    .save-new-item-button {
-      margin: 2%;
-    }
+  .item-actions {
+    width: 25%;
   }
 }
 
-.list-item {
-  display: flex;
-  justify-content: flex-end;
-
-  .action-buttons{
-    display: flex;
-  }
+.add-item{
+  width: 100%;
 }

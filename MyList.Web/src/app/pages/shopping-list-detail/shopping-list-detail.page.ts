@@ -1,87 +1,78 @@
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
-import { Observable, of } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListItem } from 'src/app/models/shopping-list-item';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
-import { take, tap } from 'rxjs/operators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-shopping-list-detail',
   templateUrl: './shopping-list-detail.page.html',
   styleUrls: ['./shopping-list-detail.page.scss']
 })
-export class ShoppingListDetailComponent implements OnInit {
-  shoppingListId: string;
+export class ShoppingListDetailComponent {
+  private itemUnderEditBackup: ShoppingListItem;
+
   shoppingList$: Observable<ShoppingList>;
-
-  addNewItem: boolean = false;
-  newItemName: string;
-
-  editItemId: string;
-  editItemNewValue: string;
+  selectedItem: ShoppingListItem;
+  editInProgress: boolean = false;
+  itemUnderEditId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private shoppingListService: ShoppingListService,
+    public shoppingListService: ShoppingListService,
     public shoppingListItemService: ShoppingListItemService
   ) {
-    this.shoppingListId = this.activatedRoute.snapshot.paramMap.get('shoppingListId');
-    this.shoppingList$ = this.shoppingListService.getShoppingListById(this.shoppingListId);
+    const shoppingListId = this.activatedRoute.snapshot.paramMap.get('shoppingListId');
+    this.shoppingList$ = this.shoppingListService.getShoppingListById(shoppingListId);
   }
 
-  ngOnInit(): void {
-  }
-
-  toggleAddNewItem() {
-    this.addNewItem = !this.addNewItem;
-    this.newItemName = null;
-  }
-
-  toggleEditItem(id: string) {
-    if (id === this.editItemId) {
-      this.editItemId = null;
-      this.editItemNewValue = null;
-    }
-    else {
-      this.editItemId = id;
-      this.shoppingList$.subscribe((list) => {
-        this.editItemNewValue = list.items.find(i => i.id === id).name;
-      });
+  itemSelected(id: string) {
+    if(!this.editInProgress) {
+      if(this.selectedItem && this.selectedItem.id === id) {
+        this.selectedItem = null;
+      }
+      else {
+        this.shoppingList$.subscribe((list) => {
+          this.selectedItem = list.items.find((i) => i.id === id);
+        });
+      }
     }
   }
 
-  saveNewItem() {
-    var newItem = {
-      name: this.newItemName,
-      shoppingListId: this.shoppingListId
-    } as ShoppingListItem;
+  itemUnderEdit(id: string) {
+    this.itemUnderEditId = id;
+    this.itemUnderEditBackup = _.cloneDeep(this.selectedItem);
 
-    console.log('add')
-    console.log(newItem)
-
-    this.shoppingListItemService.addShoppingListItem(newItem)
-      .pipe(take(1))
-      .subscribe((updatedItem) => this.shoppingList$ = of(updatedItem));
-
-    this.toggleAddNewItem();
+    this.editEvent(true);
   }
 
-  saveEditItem() {
-    console.log(this.newItemName)
-    this.shoppingList$.subscribe((list) => {
-      let item = list.items.find((i) => i.id === this.editItemId);
-      item.name = this.editItemNewValue;
-      console.log('edit')
-      console.log(item)
-      this.shoppingList$ = this.shoppingListItemService.updateShoppingListItem(item);
-      this.toggleEditItem(this.editItemId);
-    })
+  editEvent(inProgress: boolean) {
+    this.editInProgress = inProgress;
+
+    if(!inProgress) {
+      this.endureSelectedItemState();
+      this.clearSelection();
+    }
   }
 
-  deleteItem(id: string) {
-    this.shoppingList$ = this.shoppingListItemService.removeShoppingListItem(id);
+  shoppingListUpdated(updatedShoppingList: Observable<ShoppingList>) {
+    this.shoppingList$ = updatedShoppingList;
+    this.clearSelection();
+  }
+
+  private endureSelectedItemState() {
+    if(this.selectedItem) {
+      this.selectedItem.name = this.itemUnderEditBackup?.name;
+    }
+  }
+
+  private clearSelection() {
+    this.selectedItem = null;
+    this.itemUnderEditId = null;
+    this.itemUnderEditBackup = null;
   }
 
 }
