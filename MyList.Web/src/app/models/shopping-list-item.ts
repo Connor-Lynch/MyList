@@ -3,4 +3,5 @@ export interface ShoppingListItem {
   name: string;
   shoppingListId: string;
   isChecked: boolean;
+  sortOrder: number;
 }

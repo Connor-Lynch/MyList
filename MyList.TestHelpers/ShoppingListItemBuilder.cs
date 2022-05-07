@@ -11,6 +11,7 @@ namespace MyList.TestHelpers
         private Guid _shoppingListId = Guid.NewGuid();
         private string _name = "DefaultItemName";
         private bool _isChecked = false;
+        private int _sortOrder = 1;
 
         public ShoppingListItemBuilder()
         { }
@@ -44,6 +45,12 @@ namespace MyList.TestHelpers
             return this;
         }
 
+        public ShoppingListItemBuilder WithSortOrder(int sortOrder)
+        {
+            _sortOrder = sortOrder;
+            return this;
+        }
+
         public ShoppingListItem Build()
         {
             return new ShoppingListItem() 
@@ -51,7 +58,8 @@ namespace MyList.TestHelpers
                 Id = _id,
                 ShoppingListId = _shoppingListId,
                 Name = _name,
-                IsChecked = _isChecked
+                IsChecked = _isChecked,
+                SortOrder = _sortOrder
             };
         }
     }

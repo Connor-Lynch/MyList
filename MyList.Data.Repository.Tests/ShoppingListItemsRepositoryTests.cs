@@ -46,6 +46,41 @@ namespace MyList.Data.Repository.Tests
         }
 
         [TestMethod]
+        public async Task AddShouldAddShoppingListItemSortPosition()
+        {
+
+            var shoppingList = ShoppingListBuilder.Create().Build();
+
+            Seed(shoppingList);
+
+            var itemToAdd = ShoppingListItemBuilder.Create().WithIdShoppingListID(shoppingList.Id).Build();
+
+            var result = await _repository.Add(itemToAdd);
+
+            Assert.IsTrue(result.Items[1].SortOrder == 2);
+        }
+
+        [TestMethod]
+        public async Task AddShouldReturnAShoppingListWithSortedItems()
+        {
+            var shoppingListItem = new List<ShoppingListItem>()
+            {
+                ShoppingListItemBuilder.Create().WithSortOrder(2).Build(),
+                ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
+            };
+            var shoppingList = ShoppingListBuilder.Create().WithItems(shoppingListItem).Build();
+
+            Seed(shoppingList);
+
+            var itemToAdd = ShoppingListItemBuilder.Create().WithIdShoppingListID(shoppingList.Id).Build();
+
+            var result = await _repository.Add(itemToAdd);
+
+            Assert.IsTrue(result.Items[0].SortOrder == 1);
+            Assert.IsTrue(result.Items[2].SortOrder == 3);
+        }
+
+        [TestMethod]
         public async Task UpdateShouldUpdateShoppingListItem()
         {
             var item = ShoppingListItemBuilder.Create().Build();
@@ -65,6 +100,26 @@ namespace MyList.Data.Repository.Tests
 
             Assert.IsTrue(result.Items.Find(i => i.Name == "New Name") != null);
             Assert.IsTrue(updatedShoppingListInRepository.Items.Find(i => i.Name == "New Name") != null);
+        }
+
+        [TestMethod]
+        public async Task UpdateShouldReturnAShoppingListWithSortedItems()
+        {
+            var shoppingListItem = new List<ShoppingListItem>()
+            {
+                ShoppingListItemBuilder.Create().WithSortOrder(2).Build(),
+                ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
+            };
+            var shoppingList = ShoppingListBuilder.Create().WithItems(shoppingListItem).Build();
+
+            Seed(shoppingList);
+
+            shoppingListItem[0].Name = "newName";
+
+            var result = await _repository.Update(shoppingListItem[0]);
+
+            Assert.IsTrue(result.Items[0].SortOrder == 1);
+            Assert.IsTrue(result.Items[1].SortOrder == 2);
         }
 
         [TestMethod]

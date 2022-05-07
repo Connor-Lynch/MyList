@@ -1,4 +1,4 @@
-<div *ngIf="(this.shoppingList$ | async) as shoppingList" class="container">
+<div *ngIf="this.shoppingList$ && (this.shoppingList$ | async) as shoppingList" class="container">
   <app-list-detail-header
     [externalEditInProgress]="editInProgress"
     [shoppingList]="shoppingList"
@@ -9,7 +9,7 @@
   <mat-list>
     <div *ngFor="let item of shoppingList.items" class="list-item" >
       <mat-list-item>
-        <mat-checkbox (change)="itemChecked(item.id)" [(ngModel)]="item.isChecked" [disabled]="editInProgress" id="item-checkbox"></mat-checkbox>
+        <mat-checkbox (change)="itemChecked(item.id)" [(ngModel)]="item.isChecked" [disabled]="editInProgress" [id]="'item-checkbox-' + item.id"></mat-checkbox>
         <div class="list-item-content">
           <p *ngIf="item.id !== itemUnderEditId" (click)="itemSelected(item.id)" class="selectable-item">{{ item.name }}</p>
           <mat-form-field *ngIf="item.id === itemUnderEditId" class="edit-item-form">

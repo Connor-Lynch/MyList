@@ -18,6 +18,12 @@ namespace MyList.Data.Repository
 
         public async Task<ShoppingList> Add(ShoppingListItem item)
         {
+            var sortPosition = _context.ShoppingListItems
+                .Where(i => i.ShoppingListId == item.ShoppingListId)
+                .Count() + 1;
+
+            item.SortOrder = sortPosition;
+
             var result = _context.ShoppingListItems.Add(item);
 
             return await GetShoppingList(item.ShoppingListId);
@@ -54,9 +60,13 @@ namespace MyList.Data.Repository
 
         private async Task<ShoppingList> GetShoppingList(Guid listId)
         {
-            return await _context.ShoppingLists.Where(l => l.Id == listId)
+            var shoppingList =  await _context.ShoppingLists.Where(l => l.Id == listId)
                 .Include(l => l.Items)
                 .SingleOrDefaultAsync();
+
+            shoppingList.Items = shoppingList.Items?.OrderBy(i => i.SortOrder).ToList();
+
+            return shoppingList;
         }
     }
 }

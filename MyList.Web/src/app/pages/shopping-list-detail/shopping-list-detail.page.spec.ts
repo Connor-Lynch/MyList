@@ -62,7 +62,7 @@ describe('ShoppingListDetailComponent', () => {
   });
 
   it('should display item checkbox', () => {
-    const itemCheckbox = de.query(By.css('#item-checkbox'));
+    const itemCheckbox = de.query(By.css('#item-checkbox-1'));
 
     expect(itemCheckbox).toBeTruthy();
   });
@@ -71,7 +71,7 @@ describe('ShoppingListDetailComponent', () => {
     component.editInProgress = true;
     fixture.detectChanges();
 
-    const itemCheckbox = de.query(By.css('#item-checkbox'));
+    const itemCheckbox = de.query(By.css('#item-checkbox-1'));
 
     expect(itemCheckbox.attributes['class']).toContain('mat-checkbox-disabled');
   });
@@ -150,7 +150,7 @@ describe('ShoppingListDetailComponent', () => {
   });
 
   it('should call service when item is checked', () => {
-    const itemCheckbox = de.query(By.css('#item-checkbox'));
+    const itemCheckbox = de.query(By.css('#item-checkbox-1'));
     const serviceSpy = spyOn(component.shoppingListItemService, 'updateShoppingListItem');
 
     itemCheckbox.triggerEventHandler('change', {});

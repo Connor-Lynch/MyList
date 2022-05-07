@@ -61,11 +61,11 @@ export class ShoppingListDetailComponent {
 
   shoppingListUpdated(updatedShoppingList: Observable<ShoppingList>) {
     this.shoppingList$ = updatedShoppingList;
-    this.clearSelection();
+
+    this.editEvent(false)
   }
 
   itemChecked(id: string) {
-    console.log('itemSelected');
     this.shoppingList$.subscribe((list) => {
       const item = list.items.find((i) => i.id === id);
 

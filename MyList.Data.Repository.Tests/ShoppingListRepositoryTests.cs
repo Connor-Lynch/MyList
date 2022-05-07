@@ -28,7 +28,7 @@ namespace MyList.Data.Repository.Tests
         }
 
         [TestMethod]
-        public void GetAllShouldReturnACollectionOfShoppingLists()
+        public async Task GetAllShouldReturnACollectionOfShoppingLists()
         {
             var shoppingListsToSeed = new List<object>()
             {
@@ -45,7 +45,7 @@ namespace MyList.Data.Repository.Tests
         }
 
         [TestMethod]
-        public void GetAllShouldReturnACollectionOfShoppingListsWithItems()
+        public async Task GetAllShouldReturnACollectionOfShoppingListsWithItems()
         {
             var shoppingListsToSeed = new List<object>()
             {
@@ -59,6 +59,28 @@ namespace MyList.Data.Repository.Tests
 
             Assert.IsInstanceOfType(result.First().Items, typeof(List<ShoppingListItem>));
             Assert.AreEqual(result.First().Items.Count(), 1);
+        }
+
+        [TestMethod]
+        public async Task GetAllShouldReturnACollectionOfShoppingListsWithSortedItems()
+        {
+            var shoppingListItem = new List<ShoppingListItem>()
+            {
+                ShoppingListItemBuilder.Create().WithSortOrder(2).Build(),
+                ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
+            };
+
+            var shoppingListsToSeed = new List<object>()
+            {
+                ShoppingListBuilder.Create().WithItems(shoppingListItem).Build()
+            };
+
+            SeedMany(shoppingListsToSeed);
+
+            var result = _repository.GetAll();
+
+            Assert.IsTrue(result.First().Items[0].SortOrder == 1);
+            Assert.IsTrue(result.First().Items[1].SortOrder == 2);
         }
 
         [TestMethod]
@@ -99,6 +121,29 @@ namespace MyList.Data.Repository.Tests
         }
 
         [TestMethod]
+        public async Task GetByIdShouldReturnShoppingListWithItemsOfSortedItems()
+        {
+            var shoppingListItem = new List<ShoppingListItem>()
+            {
+                ShoppingListItemBuilder.Create().WithSortOrder(2).Build(),
+                ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
+            };
+            var expectedShoppingListResult = ShoppingListBuilder.Create().WithItems(shoppingListItem).Build();
+            var shoppingListsToSeed = new List<object>()
+            {
+                expectedShoppingListResult,
+                ShoppingListBuilder.Create().WithItems(shoppingListItem).Build()
+            };
+
+            SeedMany(shoppingListsToSeed);
+
+            var result = await _repository.GetById(expectedShoppingListResult.Id);
+
+            Assert.IsTrue(result.Items[0].SortOrder == 1);
+            Assert.IsTrue(result.Items[1].SortOrder == 2);
+        }
+
+        [TestMethod]
         public async Task AddShouldAddShoppingList()
         {
             var shoppingList = ShoppingListBuilder.Create().Build();
@@ -125,6 +170,22 @@ namespace MyList.Data.Repository.Tests
             Assert.IsInstanceOfType(result.Items, typeof(List<ShoppingListItem>));
             Assert.AreEqual(result.Items.Count(), 1);
             Assert.AreEqual(newShoppingListInReop.Items.Count(), 1);
+        }
+
+        [TestMethod]
+        public async Task AddShouldAddShoppingListWithSortedItems()
+        {
+            var shoppingListItem = new List<ShoppingListItem>()
+            {
+                ShoppingListItemBuilder.Create().WithSortOrder(2).Build(),
+                ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
+            };
+            var shoppingList = ShoppingListBuilder.Create().WithItems(shoppingListItem).Build();
+
+            var result = _repository.Add(shoppingList);
+
+            Assert.IsTrue(result.Items[0].SortOrder == 1);
+            Assert.IsTrue(result.Items[1].SortOrder == 2);
         }
 
         [TestMethod]
@@ -158,6 +219,25 @@ namespace MyList.Data.Repository.Tests
 
             Assert.IsInstanceOfType(result.Items, typeof(List<ShoppingListItem>));
             Assert.AreEqual(result.Items.Count(), 1);
+        }
+
+        [TestMethod]
+        public async Task UpdateNameShouldUpdateShoppingListWithSortEdItems()
+        {
+            var shoppingListItem = new List<ShoppingListItem>()
+            {
+                ShoppingListItemBuilder.Create().WithSortOrder(2).Build(),
+                ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
+            };
+            var shoppingList = ShoppingListBuilder.Create().WithItems(shoppingListItem).Build();
+            Seed(shoppingList);
+
+            shoppingList.Name = "UpdatedName";
+
+            var result = await _repository.UpdateName(shoppingList.Id, shoppingList.Name);
+
+            Assert.IsTrue(result.Items[0].SortOrder == 1);
+            Assert.IsTrue(result.Items[1].SortOrder == 2);
         }
 
         [TestMethod]

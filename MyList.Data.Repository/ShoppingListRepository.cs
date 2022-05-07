@@ -18,15 +18,24 @@ namespace MyList.Data.Repository
 
         public IQueryable<ShoppingList> GetAll()
         {
-            return _context.ShoppingLists
+            var allLists = _context.ShoppingLists
                 .Include(s => s.Items);
+
+            foreach (var list in allLists)
+            {
+                list.Items = OrderItems(list.Items);
+            }
+
+            return allLists;
         }
 
-        public Task<ShoppingList?> GetById(Guid id)
+        public async Task<ShoppingList?> GetById(Guid id)
         {
-            var result = _context.ShoppingLists.Where(l => l.Id == id)
+            var result = await _context.ShoppingLists.Where(l => l.Id == id)
                 .Include(s => s.Items)
                 .SingleOrDefaultAsync();
+
+            result.Items = OrderItems(result.Items);
 
             return result;
         }
@@ -34,6 +43,8 @@ namespace MyList.Data.Repository
         public ShoppingList Add(ShoppingList list)
         {
             var result = _context.ShoppingLists.Add(list);
+
+            result.Entity.Items = OrderItems(result.Entity.Items);
 
             return result.Entity;
         }
@@ -49,6 +60,8 @@ namespace MyList.Data.Repository
             {
                 shoppingList.Name = name;
             }
+
+            shoppingList.Items = OrderItems(shoppingList.Items);
 
             return shoppingList;
         }
@@ -68,6 +81,11 @@ namespace MyList.Data.Repository
             }
 
             return listToRemove;
+        }
+
+        private List<ShoppingListItem> OrderItems(List<ShoppingListItem> items)
+        {
+            return items?.OrderBy(i => i.SortOrder).ToList();
         }
     }
 }
