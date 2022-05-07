@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyList.Data.Database;
 
 namespace MyList.Data.Database.Migrations
 {
     [DbContext(typeof(MyListContext))]
-    partial class MyListContextModelSnapshot : ModelSnapshot
+    [Migration("20220507172923_AddedIsSelectedToItem")]
+    partial class AddedIsSelectedToItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +44,7 @@ namespace MyList.Data.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsChecked")
+                    b.Property<bool>("IsSelected")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")

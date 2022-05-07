@@ -9,6 +9,7 @@ import { ShoppingListItemService } from 'src/app/services/shopping-list-item.ser
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 describe('ShoppingListDetailComponent', () => {
   let component: ShoppingListDetailComponent;
@@ -21,6 +22,7 @@ describe('ShoppingListDetailComponent', () => {
     getShoppingListById() { return of(mockShoppingList) }
   }
   const mockShoppingListItemService = {
+    updateShoppingListItem() { return of(mockShoppingList) }
   }
 
   beforeEach(async () => {
@@ -32,7 +34,8 @@ describe('ShoppingListDetailComponent', () => {
       ],
       imports: [
         RouterTestingModule,
-        FormsModule
+        FormsModule,
+        MatCheckboxModule
        ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA
@@ -56,6 +59,21 @@ describe('ShoppingListDetailComponent', () => {
     const item = de.query(By.css('.list-item'));
 
     expect(item).toBeTruthy();
+  });
+
+  it('should display item checkbox', () => {
+    const itemCheckbox = de.query(By.css('#item-checkbox'));
+
+    expect(itemCheckbox).toBeTruthy();
+  });
+
+  it('should disable item checkbox when edit is in progress', () => {
+    component.editInProgress = true;
+    fixture.detectChanges();
+
+    const itemCheckbox = de.query(By.css('#item-checkbox'));
+
+    expect(itemCheckbox.attributes['class']).toContain('mat-checkbox-disabled');
   });
 
   it('should show item actions when item is selected', () => {
@@ -129,5 +147,14 @@ describe('ShoppingListDetailComponent', () => {
     fixture.detectChanges();
 
     expect(component.selectedItem).not.toEqual(mockShoppingListItem);
+  });
+
+  it('should call service when item is checked', () => {
+    const itemCheckbox = de.query(By.css('#item-checkbox'));
+    const serviceSpy = spyOn(component.shoppingListItemService, 'updateShoppingListItem');
+
+    itemCheckbox.triggerEventHandler('change', {});
+
+    expect(serviceSpy).toHaveBeenCalled();
   });
 });

@@ -10,6 +10,7 @@ namespace MyList.TestHelpers
         private Guid _id = Guid.NewGuid();
         private Guid _shoppingListId = Guid.NewGuid();
         private string _name = "DefaultItemName";
+        private bool _isChecked = false;
 
         public ShoppingListItemBuilder()
         { }
@@ -37,13 +38,20 @@ namespace MyList.TestHelpers
             return this;
         }
 
+        public ShoppingListItemBuilder WithIsChecked()
+        {
+            _isChecked = true;
+            return this;
+        }
+
         public ShoppingListItem Build()
         {
             return new ShoppingListItem() 
             { 
                 Id = _id,
                 ShoppingListId = _shoppingListId,
-                Name = _name
+                Name = _name,
+                IsChecked = _isChecked
             };
         }
     }

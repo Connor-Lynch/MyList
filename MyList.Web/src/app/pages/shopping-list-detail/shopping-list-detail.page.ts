@@ -1,11 +1,12 @@
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListItem } from 'src/app/models/shopping-list-item';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import * as _ from 'lodash';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-shopping-list-detail',
@@ -61,6 +62,19 @@ export class ShoppingListDetailComponent {
   shoppingListUpdated(updatedShoppingList: Observable<ShoppingList>) {
     this.shoppingList$ = updatedShoppingList;
     this.clearSelection();
+  }
+
+  itemChecked(id: string) {
+    console.log('itemSelected');
+    this.shoppingList$.subscribe((list) => {
+      const item = list.items.find((i) => i.id === id);
+
+      this.shoppingListItemService.updateShoppingListItem(item)
+        .pipe(take(1))
+        .subscribe((updatedShoppingList) =>
+          this.shoppingList$ = of(updatedShoppingList)
+        );
+    });
   }
 
   private endureSelectedItemState() {

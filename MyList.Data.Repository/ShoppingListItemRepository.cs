@@ -31,6 +31,7 @@ namespace MyList.Data.Repository
             if (result != null)
             {
                 result.Name = item.Name;
+                result.IsChecked = item.IsChecked;
             }
 
             return await GetShoppingList(item.ShoppingListId);

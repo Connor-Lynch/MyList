@@ -10,5 +10,6 @@ namespace MyList.List.Requests.Commands
     {
         public Guid ShoppingListId { get; set; }
         public string Name { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

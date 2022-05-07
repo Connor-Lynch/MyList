@@ -9,6 +9,7 @@ namespace MyList.Entity
         public Guid Id { get; set; }
         public Guid ShoppingListId { get; set; }
         public string Name { get; set; }
+        public bool IsChecked { get; set; }
 
         public ShoppingListItem()
         {

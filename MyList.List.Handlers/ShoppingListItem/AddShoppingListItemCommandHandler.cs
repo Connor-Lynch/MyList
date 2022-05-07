@@ -22,6 +22,7 @@ namespace MyList.List.Handlers
             {
                 Name = request.Name,
                 ShoppingListId = request.ShoppingListId,
+                IsChecked = request.IsChecked
             };
 
             var result = await _shoppingListItemRepository.Add(newShoppingListItem);
