@@ -1,10 +1,15 @@
 .list-overview{
   color: grey;
 
-  p{
+  .item {
     white-space: nowrap;
     overflow: hidden;
   }
+
+  .checked-item {
+    text-decoration: line-through;
+  }
+
 }
 
 .hidden-items{

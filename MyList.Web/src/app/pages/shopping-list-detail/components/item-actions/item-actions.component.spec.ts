@@ -89,6 +89,15 @@ describe('ItemActionsComponent', () => {
     expect(deleteButton).toBeTruthy();
   });
 
+  it('should disable edit button is item is checked', () => {
+    component.item.isChecked = true;
+    fixture.detectChanges();
+
+    const editButton = de.query(By.css('#edit-item-button'));
+
+    expect(editButton.attributes['disabled']).toBeTruthy();
+  });
+
   it('should show cancel edit button when edit is clicked', () => {
     const editButton = de.query(By.css('#edit-item-button'));
 

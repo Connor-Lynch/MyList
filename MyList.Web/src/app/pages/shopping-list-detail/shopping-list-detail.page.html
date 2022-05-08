@@ -13,7 +13,7 @@
       <mat-list-item>
         <mat-checkbox (change)="itemChecked(item.id)" [(ngModel)]="item.isChecked" [disabled]="editInProgress" [id]="'item-checkbox-' + item.id"></mat-checkbox>
         <div class="list-item-content">
-          <p *ngIf="item.id !== itemUnderEditId" (click)="itemSelected(item.id)" class="selectable-item">{{ item.name }}</p>
+          <p *ngIf="item.id !== itemUnderEditId" (click)="itemSelected(item.id)" [class]="item.isChecked? 'selectable-item checked-item' : 'selectable-item'">{{ item.name }}</p>
           <form *ngIf="item.id === itemUnderEditId" class="edit-item-form" [formGroup]="editItemForm">
             <mat-form-field class="edit-item-form-field">
               <input

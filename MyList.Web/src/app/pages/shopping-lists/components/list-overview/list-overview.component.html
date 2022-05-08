@@ -1,6 +1,6 @@
 <div *ngIf="items && items.length > 0">
   <div *ngFor="let item of items.slice(0, 3)" class="list-overview">
-    <p id="item">{{ item.name }}</p>
+    <p [class]="item.isChecked ? 'item checked-item' : 'item'">{{ item.name }}</p>
   </div>
   <div *ngIf="items.length > 3" class="hidden-items">
     <mat-icon>add</mat-icon>

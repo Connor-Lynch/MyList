@@ -34,7 +34,7 @@ export class ShoppingListsPage implements OnInit {
     this.shoppingLists$.subscribe((list) => {
       const selectedShoppingList = list.find(l => l.id === id);
 
-      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      const confirmationDialog = this.dialog.open(ConfirmationDialogComponent, {
         data: {
           message: `Delete ${selectedShoppingList.name}`,
           affirmativeButtonText: 'Delete',
@@ -44,7 +44,7 @@ export class ShoppingListsPage implements OnInit {
         } as ConfirmationDialogData
       });
 
-      dialogRef.afterClosed().subscribe(result => {
+      confirmationDialog?.afterClosed().subscribe(result => {
         if (result) {
           this.shoppingListService.removeShoppingList(id)
             .pipe(take(1))
