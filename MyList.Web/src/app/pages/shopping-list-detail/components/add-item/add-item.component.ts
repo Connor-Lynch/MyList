@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -13,8 +14,10 @@ import { ShoppingListItemService } from 'src/app/services/shopping-list-item.ser
 })
 export class AddItemComponent implements OnInit {
   private shoppingListId: string;
-  newItemName: string;
-  addNewItem: boolean = false;
+  public addItemForm = this.formBuilder.group({
+    itemName: ['']
+  });
+  public addNewItem: boolean = false;
 
   @Input() externalEditInProgress: boolean;
   @Output() itemBeingAddedEvent = new EventEmitter<boolean>();
@@ -22,7 +25,8 @@ export class AddItemComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    public shoppingListItemService: ShoppingListItemService
+    public shoppingListItemService: ShoppingListItemService,
+    public formBuilder: FormBuilder
   ) {
     this.shoppingListId = this.activatedRoute.snapshot.paramMap.get('shoppingListId');
   }
@@ -31,23 +35,26 @@ export class AddItemComponent implements OnInit {
   }
 
   toggleAddNewItem() {
-    this.newItemName = null;
+    this.addItemForm.get('itemName').setValue('');
     this.addNewItem = !this.addNewItem;
     this.itemBeingAddedEvent.emit(this.addNewItem);
   }
 
   saveItem() {
-    var newItem = {
-      name: this.newItemName,
-      shoppingListId: this.shoppingListId
-    } as ShoppingListItem;
+    const newItemName = this.addItemForm.get('itemName').value;
+    if (newItemName) {
+      var newItem = {
+        name: newItemName,
+        shoppingListId: this.shoppingListId
+      } as ShoppingListItem;
 
-    this.shoppingListItemService.addShoppingListItem(newItem)
-      .pipe(take(1))
-      .subscribe((updatedShoppingList) =>
-        this.shoppingListUpdatedEvent.emit(of(updatedShoppingList))
-      );
+      this.shoppingListItemService.addShoppingListItem(newItem)
+        .pipe(take(1))
+        .subscribe((updatedShoppingList) =>
+          this.shoppingListUpdatedEvent.emit(of(updatedShoppingList))
+        );
 
-    this.toggleAddNewItem();
+      this.toggleAddNewItem();
+    }
   }
 }

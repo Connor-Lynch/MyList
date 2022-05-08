@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { ListDetailHeaderComponent } from './list-detail-header.component';
 import { CommonModule } from "@angular/common";
@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
     MatIconModule,
     MatInputModule,
     MatDividerModule,
+    ReactiveFormsModule,
     FormsModule
   ],
   declarations: [ListDetailHeaderComponent],

@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ListOverviewComponent } from './list-overview.component';
 import { ShoppingListItemBuilder } from 'src/app/test/builders/shopping-list-item.builder';
+import { MatIconModule } from '@angular/material/icon';
 
 describe('ListOverviewComponent', () => {
   let component: ListOverviewComponent;
@@ -18,7 +19,8 @@ describe('ListOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ListOverviewComponent ]
+      declarations: [ ListOverviewComponent ],
+      imports: [ MatIconModule ]
     })
     .compileComponents();
   });

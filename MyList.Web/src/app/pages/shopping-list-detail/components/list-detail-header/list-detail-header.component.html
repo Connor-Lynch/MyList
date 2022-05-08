@@ -6,9 +6,14 @@
     </button>
   </div>
   <div *ngIf="isEditingName" class="header">
-    <mat-form-field class="edit-name-form">
-      <input matInput [(ngModel)]="newName" class="form-input">
-    </mat-form-field>
+    <form [formGroup]="editListNameForm" (ngSubmit)="saveEdit()" class="edit-name-form">
+      <mat-form-field class="edit-name-form-field">
+        <input matInput
+          type="text"
+          formControlName="newListName"
+          class="form-input">
+      </mat-form-field>
+    </form>
     <div>
       <button mat-icon-button color="warn" (click)="editListName()" id="cancel-button">
         <mat-icon>close</mat-icon>

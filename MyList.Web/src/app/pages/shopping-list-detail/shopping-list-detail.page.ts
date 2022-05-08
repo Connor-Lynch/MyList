@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListItem } from 'src/app/models/shopping-list-item';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
-import * as _ from 'lodash';
 import { take } from 'rxjs/operators';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-shopping-list-detail',
@@ -14,17 +14,19 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./shopping-list-detail.page.scss']
 })
 export class ShoppingListDetailComponent {
-  private itemUnderEditBackup: ShoppingListItem;
-
-  shoppingList$: Observable<ShoppingList>;
-  selectedItem: ShoppingListItem;
-  editInProgress: boolean = false;
-  itemUnderEditId: string;
+  public editItemForm = this.formBuilder.group({
+    newItemName: ['']
+  });
+  public shoppingList$: Observable<ShoppingList>;
+  public selectedItem: ShoppingListItem;
+  public editInProgress: boolean = false;
+  public itemUnderEditId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     public shoppingListService: ShoppingListService,
-    public shoppingListItemService: ShoppingListItemService
+    public shoppingListItemService: ShoppingListItemService,
+    public formBuilder: FormBuilder
   ) {
     const shoppingListId = this.activatedRoute.snapshot.paramMap.get('shoppingListId');
     this.shoppingList$ = this.shoppingListService.getShoppingListById(shoppingListId);
@@ -44,17 +46,16 @@ export class ShoppingListDetailComponent {
   }
 
   itemUnderEdit(id: string) {
+    this.editItemForm.get('newItemName').setValue(this.selectedItem.name);
     this.itemUnderEditId = id;
-    this.itemUnderEditBackup = _.cloneDeep(this.selectedItem);
-
-    this.editEvent(true);
+    this.editInProgress = true;
   }
 
   editEvent(inProgress: boolean) {
     this.editInProgress = inProgress;
+    this.selectedItem = null;
 
     if(!inProgress) {
-      this.endureSelectedItemState();
       this.clearSelection();
     }
   }
@@ -77,16 +78,8 @@ export class ShoppingListDetailComponent {
     });
   }
 
-  private endureSelectedItemState() {
-    if(this.selectedItem) {
-      this.selectedItem.name = this.itemUnderEditBackup?.name;
-    }
-  }
-
   private clearSelection() {
     this.selectedItem = null;
     this.itemUnderEditId = null;
-    this.itemUnderEditBackup = null;
   }
-
 }

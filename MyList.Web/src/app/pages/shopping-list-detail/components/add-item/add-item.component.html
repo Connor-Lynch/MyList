@@ -1,8 +1,12 @@
 <div *ngIf="addNewItem" class="list-item">
   <mat-checkbox disabled="true"></mat-checkbox>
-  <mat-form-field class="add-item-form">
-    <input matInput [(ngModel)]="newItemName">
-  </mat-form-field>
+  <form [formGroup]="addItemForm" (ngSubmit)="saveItem()" class="add-item-form">
+    <mat-form-field class="form-field">
+      <input matInput
+        type="text"
+        formControlName="itemName">
+    </mat-form-field>
+  </form>
   <div class="actions">
     <button mat-icon-button color="warn" (click)="toggleAddNewItem()" id="cancel-add-button">
       <mat-icon>close</mat-icon>

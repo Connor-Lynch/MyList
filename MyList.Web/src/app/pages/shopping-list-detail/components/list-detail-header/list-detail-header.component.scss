@@ -11,8 +11,12 @@
   .edit-name-form {
     width: 75%;
 
-    .form-input{
-      font-size: 2em;
+    .edit-name-form-field {
+      width: 100%;
+
+      .form-input{
+        font-size: 2em;
+      }
     }
   }
 }

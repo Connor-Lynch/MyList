@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddItemComponent } from './add-item.component';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
@@ -16,7 +16,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatInputModule,
     MatListModule,
     MatCheckboxModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [AddItemComponent],
   exports: [AddItemComponent]

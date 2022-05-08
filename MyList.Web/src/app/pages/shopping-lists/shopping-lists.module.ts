@@ -7,12 +7,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
 import { ListOverviewModule } from './components/list-overview/list-overview.module';
 import { AddListDialogModule } from './components/add-list-dialog/add-list-dialog.module';
 import { MatDialogModule } from '@angular/material/dialog';
-
-
+import { ConfirmationDialogModule } from 'src/app/components/confirmation-dialog/confirmation-dialog.module';
 
 const routes: Routes = [
   {
@@ -32,7 +30,8 @@ const routes: Routes = [
     MatDividerModule,
     ListOverviewModule,
     AddListDialogModule,
-    MatDialogModule
+    MatDialogModule,
+    ConfirmationDialogModule
   ],
   declarations: [ShoppingListsPage]
 })

@@ -8,13 +8,25 @@ import { of } from 'rxjs';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 describe('ShoppingListDetailComponent', () => {
   let component: ShoppingListDetailComponent;
   let fixture: ComponentFixture<ShoppingListDetailComponent>;
   let de: DebugElement;
+
+  const mockActiveRoute = {
+    snapshot: {
+      paramMap: convertToParamMap({
+        shoppingListId: '1'
+      })
+    }
+  }
 
   const mockShoppingListItem = ShoppingListItemBuilder.create().build();
   const mockShoppingList = ShoppingListBuilder.create().withId(mockShoppingListItem.shoppingListId).withItems([mockShoppingListItem]).build();
@@ -29,13 +41,18 @@ describe('ShoppingListDetailComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ShoppingListDetailComponent ],
       providers: [
+        { provide: ActivatedRoute, useValue: mockActiveRoute },
         { provide: ShoppingListService, useValue: mockShoppingListService },
         { provide: ShoppingListItemService, useValue: mockShoppingListItemService }
       ],
       imports: [
-        RouterTestingModule,
-        FormsModule,
-        MatCheckboxModule
+        RouterTestingModule.withRoutes([]),
+        MatCheckboxModule,
+        MatButtonModule,
+        MatListModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        FormsModule
        ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA

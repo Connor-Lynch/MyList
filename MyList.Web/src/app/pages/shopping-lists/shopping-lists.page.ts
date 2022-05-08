@@ -1,3 +1,5 @@
+import { ConfirmationDialogData } from './../../components/confirmation-dialog/models/confirmation-dialog-data';
+import { ConfirmationDialogComponent } from './../../components/confirmation-dialog/confirmation-dialog.component';
 import { AddListDialogComponent } from './components/add-list-dialog/add-list-dialog.component';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -25,14 +27,31 @@ export class ShoppingListsPage implements OnInit {
   }
 
   toggleListAdd() {
-    const dialogRef = this.dialog.open(AddListDialogComponent, {
-      width: '250px'
-    });
+    this.dialog.open(AddListDialogComponent);
   }
 
   deleteShoppingList(id: string) {
-    this.shoppingListService.removeShoppingList(id)
-      .pipe(take(1))
-      .subscribe(() => this.shoppingLists$ = this.shoppingListService.getAllShoppingLists());
+    this.shoppingLists$.subscribe((list) => {
+      const selectedShoppingList = list.find(l => l.id === id);
+
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          message: `Delete ${selectedShoppingList.name}`,
+          affirmativeButtonText: 'Delete',
+          affirmativeButtonColor: 'warn',
+          negativeButtonText: 'Cancel',
+          negativeButtonColor: 'primary'
+        } as ConfirmationDialogData
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.shoppingListService.removeShoppingList(id)
+            .pipe(take(1))
+            .subscribe(() => this.shoppingLists$ = this.shoppingListService.getAllShoppingLists());
+        }
+      });
+    });
+
   }
 }

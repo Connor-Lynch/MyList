@@ -1,6 +1,5 @@
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
-
 import { AddListDialogComponent } from './add-list-dialog.component';
 import { CUSTOM_ELEMENTS_SCHEMA, Type, DebugElement } from '@angular/core';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
@@ -9,6 +8,8 @@ import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('AddItemDialogComponent', () => {
   let component: AddListDialogComponent;
@@ -35,7 +36,10 @@ describe('AddItemDialogComponent', () => {
       imports: [
         RouterTestingModule.withRoutes([
           { path: 'shopping-list-detail/1', component: {} as Type<any> }
-        ])
+        ]),
+        MatButtonModule,
+        ReactiveFormsModule,
+        FormsModule
       ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA
@@ -83,7 +87,17 @@ describe('AddItemDialogComponent', () => {
     expect(closeSpy).toHaveBeenCalled();
   });
 
+  it('should not call service when save button is clicked with a null name', () => {
+    const saveButton = de.query(By.css('#save-button'));
+    const serviceSpy = spyOn(component.shoppingListService, 'addShoppingList');
+
+    saveButton.triggerEventHandler('click', {});
+
+    expect(serviceSpy).not.toHaveBeenCalled();
+  });
+
   it('should call service when save button is clicked', () => {
+    component.addListForm.get('listName').setValue('listName');
     const saveButton = de.query(By.css('#save-button'));
     const serviceSpy = spyOn(component.shoppingListService, 'addShoppingList');
 
@@ -93,6 +107,7 @@ describe('AddItemDialogComponent', () => {
   });
 
   it('should navigate to list detail page after save', fakeAsync(() => {
+    component.addListForm.get('listName').setValue('listName');
     const saveButton = de.query(By.css('#save-button'));
     spyOn(component.shoppingListService, 'addShoppingList').and.returnValue(of(mockShoppingList));
 
@@ -104,6 +119,7 @@ describe('AddItemDialogComponent', () => {
   }));
 
   it('should close dialog after save', () => {
+    component.addListForm.get('listName').setValue('listName');
     const saveButton = de.query(By.css('#save-button'));
     spyOn(component.shoppingListService, 'addShoppingList').and.returnValue(of(mockShoppingList));
     const closeSpy = spyOn(component.dialogRef, 'close');

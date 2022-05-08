@@ -2,15 +2,23 @@ import { ShoppingListBuilder } from './../test/builders/shopping-list.builder';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ShoppingListService } from './shopping-list.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 describe('ShoppingListService', () => {
   let service: ShoppingListService;
   const apiRootUrl = 'test/api';
 
+  const mockSnackBar = {
+    open() { }
+  }
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule
+      ],
+      providers: [
+        { provide: MatSnackBar, useValue: mockSnackBar }
       ]
     });
     service = TestBed.inject(ShoppingListService);
@@ -29,7 +37,7 @@ describe('ShoppingListService', () => {
     expect(httpSpy).toHaveBeenCalledWith(`${apiRootUrl}/ShoppingLists`);
   });
 
-  it('should send get shopping list from all shopping lists if it exists', () => {
+  it('should get shopping list from all shopping lists if it exists', () => {
     const mockShoppingLists = [ ShoppingListBuilder.create().build() ];
     service['shoppingLists'].next(mockShoppingLists);
     const httpSpy = spyOn(service.http, 'get').and.callThrough();

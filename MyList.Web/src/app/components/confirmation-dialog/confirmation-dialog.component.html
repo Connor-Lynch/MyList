@@ -1,0 +1,17 @@
+<div class="message">
+  <h1>{{ data.message }}</h1>
+</div>
+<div class="actions">
+  <button id="negative-button"
+    mat-button
+    [color]="data.negativeButtonColor"
+    [mat-dialog-close]>
+    {{ data.negativeButtonText }}
+  </button>
+  <button id="affirmative-button"
+    mat-raised-button
+    [color]="data.affirmativeButtonColor"
+    [mat-dialog-close]="true">
+    {{ data.affirmativeButtonText }}
+  </button>
+</div>

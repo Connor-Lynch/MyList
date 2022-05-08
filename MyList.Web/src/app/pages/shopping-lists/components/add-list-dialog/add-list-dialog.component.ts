@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -11,25 +12,31 @@ import { ShoppingListService } from 'src/app/services/shopping-list.service';
   styleUrls: ['./add-list-dialog.component.scss']
 })
 export class AddListDialogComponent {
-  newListName: string;
+  public addListForm = this.formBuilder.group({
+    listName: ['']
+  });
 
   constructor(
     public shoppingListService: ShoppingListService,
     private router: Router,
     public dialogRef: MatDialogRef<AddListDialogComponent>,
+    public formBuilder: FormBuilder
   ) { }
 
   saveNewList() {
-    const newShoppingList = {
-      name: this.newListName
-    } as ShoppingList;
+    const newListName = this.addListForm.get('listName').value;
+    if (newListName) {
+      const newShoppingList = {
+        name: newListName
+      } as ShoppingList;
 
-    this.shoppingListService.addShoppingList(newShoppingList)
-      .pipe(take(1))
-      .subscribe((newList) => {
-        this.router.navigateByUrl(`/shopping-list-detail/${newList.id}`);
-        this.dialogRef.close();
-      });
+      this.shoppingListService.addShoppingList(newShoppingList)
+        .pipe(take(1))
+        .subscribe((newList) => {
+          this.router.navigateByUrl(`/shopping-list-detail/${newList.id}`);
+          this.dialogRef.close();
+        });
+    }
   }
 
   cancel() {

@@ -1,6 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
@@ -24,6 +26,9 @@ describe('ListDetailHeaderComponent', () => {
         { provide: ShoppingListService, useValue: mockShoppingListService }
       ],
       imports: [
+        MatButtonModule,
+        MatIconModule,
+        ReactiveFormsModule,
         FormsModule
       ],
       schemas: [
@@ -114,20 +119,7 @@ describe('ListDetailHeaderComponent', () => {
     expect(saveButton).toBeTruthy();
   });
 
-  it('should emit header being edited event when save button is clicked', () => {
-    const editButton = de.query(By.css('#edit-button'));
-    editButton.triggerEventHandler('click', {});
-    fixture.detectChanges();
-
-    const saveButton = de.query(By.css('#save-button'));
-    const headerBeingEditedEventSpy = spyOn(component.headerBeingEditedEvent, 'emit');
-
-    saveButton.triggerEventHandler('click', {});
-
-    expect(headerBeingEditedEventSpy).toHaveBeenCalledWith(false);
-  });
-
-  it('should call service when save is clicked', () => {
+  it('should not call service if new list name is the same as the old name', () => {
     const editButton = de.query(By.css('#edit-button'));
     editButton.triggerEventHandler('click', {});
     fixture.detectChanges();
@@ -137,6 +129,40 @@ describe('ListDetailHeaderComponent', () => {
 
     saveButton.triggerEventHandler('click', {});
 
-    expect(serviceSpy).toHaveBeenCalled();
+    expect(serviceSpy).not.toHaveBeenCalled();
   });
+
+  it('should call service when save is clicked', fakeAsync(() => {
+    const editButton = de.query(By.css('#edit-button'));
+    editButton.triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    component.editListNameForm.get('newListName').setValue('saveName');
+
+    const saveButton = de.query(By.css('#save-button'));
+    const serviceSpy = spyOn(component.shoppingListService, 'updateShoppingList').and.callThrough();
+
+    saveButton.triggerEventHandler('click', {});
+
+    flush();
+
+    expect(serviceSpy).toHaveBeenCalled();
+  }));
+
+  it('should emit header being edited event when save button is clicked', fakeAsync(() => {
+    const editButton = de.query(By.css('#edit-button'));
+    editButton.triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    component.editListNameForm.get('newListName').setValue('emitName');
+
+    const saveButton = de.query(By.css('#save-button'));
+    const headerBeingEditedEventSpy = spyOn(component.headerBeingEditedEvent, 'emit').and.callThrough();
+
+    saveButton.triggerEventHandler('click', {});
+
+    flush();
+
+    expect(headerBeingEditedEventSpy).toHaveBeenCalledWith(false);
+  }));
 });

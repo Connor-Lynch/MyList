@@ -1,11 +1,13 @@
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import { ShoppingListItemBuilder } from 'src/app/test/builders/shopping-list-item.builder';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
-
 import { ItemActionsComponent } from './item-actions.component';
 
 describe('ItemActionsComponent', () => {
@@ -26,6 +28,10 @@ describe('ItemActionsComponent', () => {
       providers: [
         { provide: ShoppingListItemService, useValue: mockShoppingListItemService }
       ],
+      imports: [
+        MatButtonModule,
+        MatIconModule
+      ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA
       ]
@@ -41,6 +47,11 @@ describe('ItemActionsComponent', () => {
     component.item = mockShoppingListItem;
     component.selectedItem = mockShoppingListItem;
     component.shoppingList$ = of(mockShoppingList);
+
+    const formBuilder = new FormBuilder();
+    component.editItemForm = formBuilder.group({
+      newItemName: ['']
+    });
 
     fixture.detectChanges();
   });
@@ -122,10 +133,27 @@ describe('ItemActionsComponent', () => {
     expect(unselectedItemEventSpy).toHaveBeenCalled();
   });
 
+  it('should not call service when save edit is clicked with the same name', () => {
+    const editButton = de.query(By.css('#edit-item-button'));
+    editButton.triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    component.editItemForm.get('newItemName').setValue(mockShoppingListItem.name);
+
+    const saveButton = de.query(By.css('#save-item-button'));
+    const serviceSpy = spyOn(component.shoppingListItemService, 'updateShoppingListItem');
+
+    saveButton.triggerEventHandler('click', {});
+
+    expect(serviceSpy).not.toHaveBeenCalled();
+  });
+
   it('should call service when save edit is clicked', () => {
     const editButton = de.query(By.css('#edit-item-button'));
     editButton.triggerEventHandler('click', {});
     fixture.detectChanges();
+
+    component.editItemForm.get('newItemName').setValue('newName');
 
     const saveButton = de.query(By.css('#save-item-button'));
     const serviceSpy = spyOn(component.shoppingListItemService, 'updateShoppingListItem');

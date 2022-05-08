@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddItemComponent } from './add-item.component';
@@ -8,6 +8,10 @@ import { of } from 'rxjs';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 describe('AddItemComponent', () => {
   let component: AddItemComponent;
@@ -28,6 +32,11 @@ describe('AddItemComponent', () => {
       ],
       imports: [
         RouterTestingModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatCheckboxModule,
+        ReactiveFormsModule,
         FormsModule
       ],
       schemas: [
@@ -120,10 +129,25 @@ describe('AddItemComponent', () => {
     expect(itemBeingAddedEventSpy).toHaveBeenCalledWith(false);
   });
 
+  it('should not call service when save is clicked with empty form value', () => {
+    const addItemButton = de.query(By.css('#add-item-button'));
+    addItemButton.triggerEventHandler('click', {});
+    fixture.detectChanges();
+
+    const saveButton = de.query(By.css('#save-item-button'));
+    const serviceSpy = spyOn(component.shoppingListItemService, 'addShoppingListItem');
+
+    saveButton.triggerEventHandler('click', {});
+
+    expect(serviceSpy).not.toHaveBeenCalled();
+  });
+
   it('should call service when save is clicked', () => {
     const addItemButton = de.query(By.css('#add-item-button'));
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
+
+    component.addItemForm.get('itemName').setValue('newItem');
 
     const saveButton = de.query(By.css('#save-item-button'));
     const serviceSpy = spyOn(component.shoppingListItemService, 'addShoppingListItem');
@@ -137,6 +161,8 @@ describe('AddItemComponent', () => {
     const addItemButton = de.query(By.css('#add-item-button'));
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
+
+    component.addItemForm.get('itemName').setValue('newItem');
 
     const saveButton = de.query(By.css('#save-item-button'));
     const shoppingListUpdatedEventSpy = spyOn(component.shoppingListUpdatedEvent, 'emit');

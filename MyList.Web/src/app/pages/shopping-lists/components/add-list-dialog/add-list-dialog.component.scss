@@ -1,4 +1,14 @@
-.actions {
-  display: flex;
-  justify-content: space-between;
+.container {
+  min-width: 25vw;
+
+  .add-form {
+    font-size: 2em;
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+  }
 }
+
