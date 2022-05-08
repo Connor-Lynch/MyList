@@ -8,6 +8,7 @@ namespace MyList.TestHelpers
     {
         private Guid _id = Guid.NewGuid();
         private string _name = "defaultList";
+        private DateTime _createdDate = DateTime.Now;
         private List<ShoppingListItem> _items = new List<ShoppingListItem>() 
         { 
             ShoppingListItemBuilder.Create().Build()
@@ -45,13 +46,20 @@ namespace MyList.TestHelpers
             return this;
         }
 
+        public ShoppingListBuilder WithCreatedDate(DateTime date)
+        {
+            _createdDate = date;
+            return this;
+        }
+
         public ShoppingList Build()
         {
             return new ShoppingList()
             {
                 Id = _id,
                 Name = _name,
-                Items = _items
+                Items = _items,
+                CreatedDate = _createdDate
             };
         }
     }

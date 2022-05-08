@@ -45,6 +45,24 @@ namespace MyList.Data.Repository.Tests
         }
 
         [TestMethod]
+        public async Task GetAllShouldReturnACollectionOfShoppingListsOrderByDateWithTheNewestFirst()
+        {
+            var shoppingListsToSeed = new List<object>()
+            {
+                ShoppingListBuilder.Create().WithCreatedDate(DateTime.Now.AddMinutes(-1)).Build(),
+                ShoppingListBuilder.Create().WithName("Oldest").WithCreatedDate(DateTime.Now.AddDays(-1)).Build(),
+                ShoppingListBuilder.Create().WithName("Newest").Build()
+            };
+
+            SeedMany(shoppingListsToSeed);
+
+            var result = await _repository.GetAll().ToListAsync();
+
+            Assert.AreEqual(result.First().Name, "Newest");
+            Assert.AreEqual(result.Last().Name, "Oldest");
+        }
+
+        [TestMethod]
         public async Task GetAllShouldReturnACollectionOfShoppingListsWithItems()
         {
             var shoppingListsToSeed = new List<object>()

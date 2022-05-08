@@ -19,7 +19,8 @@ namespace MyList.Data.Repository
         public IQueryable<ShoppingList> GetAll()
         {
             var allLists = _context.ShoppingLists
-                .Include(s => s.Items);
+                .Include(s => s.Items)
+                .OrderByDescending(s => s.CreatedDate);
 
             foreach (var list in allLists)
             {
