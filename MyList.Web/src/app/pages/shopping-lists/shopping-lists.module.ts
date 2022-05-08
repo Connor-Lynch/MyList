@@ -1,3 +1,4 @@
+import { MatDividerModule } from '@angular/material/divider';
 import { ShoppingListsPage } from './shopping-lists.page';
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from '@angular/core';
@@ -7,6 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
+import { ListOverviewModule } from './components/list-overview/list-overview.module';
+import { AddListDialogModule } from './components/add-list-dialog/add-list-dialog.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -25,7 +29,10 @@ const routes: Routes = [
     MatButtonModule,
     MatInputModule,
     MatIconModule,
-    FormsModule
+    MatDividerModule,
+    ListOverviewModule,
+    AddListDialogModule,
+    MatDialogModule
   ],
   declarations: [ShoppingListsPage]
 })

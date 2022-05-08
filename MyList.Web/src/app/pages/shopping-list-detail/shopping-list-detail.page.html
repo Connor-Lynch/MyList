@@ -1,4 +1,6 @@
-<div *ngIf="this.shoppingList$ && (this.shoppingList$ | async) as shoppingList" class="container">
+<app-back-button class="back-button"></app-back-button>
+
+<div *ngIf="(this.shoppingList$ | async) as shoppingList" class="container">
   <app-list-detail-header
     [externalEditInProgress]="editInProgress"
     [shoppingList]="shoppingList"

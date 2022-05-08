@@ -1,9 +1,10 @@
+import { AddListDialogComponent } from './components/add-list-dialog/add-list-dialog.component';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-shopping-lists',
@@ -12,12 +13,10 @@ import { ShoppingListService } from 'src/app/services/shopping-list.service';
 })
 export class ShoppingListsPage implements OnInit {
   shoppingLists$: Observable<ShoppingList[]>;
-  addNewList: boolean = false;
-  newListName: string;
 
   constructor(
     public shoppingListService: ShoppingListService,
-    private router: Router
+    public dialog: MatDialog
     ) {
     this.shoppingLists$ = shoppingListService.getAllShoppingLists();
   }
@@ -26,18 +25,9 @@ export class ShoppingListsPage implements OnInit {
   }
 
   toggleListAdd() {
-    this.addNewList = !this.addNewList;
-    this.newListName = null;
-  }
-
-  saveNewList() {
-    const newShoppingList = {
-      name: this.newListName
-    } as ShoppingList;
-
-    this.shoppingListService.addShoppingList(newShoppingList)
-      .pipe(take(1))
-      .subscribe((newList) => this.router.navigateByUrl(`/shopping-list-detail/${newList.id}`));
+    const dialogRef = this.dialog.open(AddListDialogComponent, {
+      width: '250px'
+    });
   }
 
   deleteShoppingList(id: string) {

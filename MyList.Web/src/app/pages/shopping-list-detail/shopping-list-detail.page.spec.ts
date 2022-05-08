@@ -48,11 +48,20 @@ describe('ShoppingListDetailComponent', () => {
     fixture = TestBed.createComponent(ShoppingListDetailComponent);
     component = fixture.componentInstance;
     de = fixture.debugElement;
+
+    component.shoppingList$ = of(mockShoppingList);
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have a back button', () => {
+    const backButton = de.query(By.css('.back-button'));
+
+    expect(backButton).toBeTruthy();
   });
 
   it('should display item', () => {

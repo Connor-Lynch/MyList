@@ -1,26 +1,42 @@
-.card {
-  margin: 5%;
-}
-
-.add-list-container{
+.card-list-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-wrap: wrap;
+  align-content: flex-start;
   margin: 5%;
+  overflow-y: auto;
 
-  .add-list-form{
-    width: 85%;
+  .card {
+    width: 40%;
+    height: 20%;
+    margin: 2%;
+    cursor: pointer;
 
-    .add-form-card {
+    .list-name {
+      margin-bottom: 5%;
+    }
+
+    .list-overview {
+      height: 100%;
+      margin-top: 5%;
+    }
+
+    .card-actions {
       display: flex;
-
-      .add-form {
-        width: 100%;
-      }
-
-      .save-button {
-        margin: 3% 2%;
-      }
+      justify-content: end;
     }
   }
+
+  @media only screen and (max-width: 600px) {
+    .card {
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+}
+
+.add-fab {
+  position:fixed;
+  bottom:5%;
+  right:5%;
+  cursor:pointer;
 }

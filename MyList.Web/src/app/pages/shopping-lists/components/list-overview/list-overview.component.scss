@@ -1,0 +1,18 @@
+.list-overview{
+  color: grey;
+
+  p{
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+.hidden-items{
+  display: flex;
+  align-items: center;
+  color: grey;
+
+  p {
+    margin: 0%;
+  }
+}

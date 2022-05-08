@@ -43,7 +43,7 @@ describe('AppComponent', () => {
   });
 
   it('should have a header component', () => {
-    const header = de.query(By.css('#header'));
+    const header = de.query(By.css('.header'));
 
     expect(header).toBeTruthy();
   });
