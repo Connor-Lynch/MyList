@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ShoppingListItem } from 'src/app/models/shopping-list-item';
 
 @Component({
@@ -6,13 +6,9 @@ import { ShoppingListItem } from 'src/app/models/shopping-list-item';
   templateUrl: './list-overview.component.html',
   styleUrls: ['./list-overview.component.scss']
 })
-export class ListOverviewComponent implements OnInit {
+export class ListOverviewComponent {
 
   @Input() items: ShoppingListItem[]
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

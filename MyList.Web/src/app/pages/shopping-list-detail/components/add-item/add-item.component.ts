@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -12,7 +12,7 @@ import { ShoppingListItemService } from 'src/app/services/shopping-list-item.ser
   templateUrl: './add-item.component.html',
   styleUrls: ['./add-item.component.scss']
 })
-export class AddItemComponent implements OnInit {
+export class AddItemComponent {
   private shoppingListId: string;
   public addItemForm = this.formBuilder.group({
     itemName: ['']
@@ -29,9 +29,6 @@ export class AddItemComponent implements OnInit {
     public formBuilder: FormBuilder
   ) {
     this.shoppingListId = this.activatedRoute.snapshot.paramMap.get('shoppingListId');
-  }
-
-  ngOnInit(): void {
   }
 
   toggleAddNewItem() {

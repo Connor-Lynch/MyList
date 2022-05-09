@@ -52,6 +52,5 @@ export class ShoppingListsPage implements OnInit {
         }
       });
     });
-
   }
 }

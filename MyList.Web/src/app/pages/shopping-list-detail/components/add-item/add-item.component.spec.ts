@@ -58,13 +58,13 @@ describe('AddItemComponent', () => {
   });
 
   it('should have an add item button', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
 
     expect(addItemButton).toBeTruthy();
   });
 
   it('should show add form when add item button is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
     let addItemForm = de.query(By.css('.add-item-form'));
 
     expect(addItemForm).toBeFalsy();
@@ -81,7 +81,7 @@ describe('AddItemComponent', () => {
     component.externalEditInProgress = true;
     fixture.detectChanges();
 
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
 
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
@@ -92,7 +92,7 @@ describe('AddItemComponent', () => {
   });
 
   it('should hide the add form when cancel add button is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
 
@@ -109,7 +109,7 @@ describe('AddItemComponent', () => {
   });
 
   it('should emit item being added event add item button is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
     const itemBeingAddedEventSpy = spyOn(component.itemBeingAddedEvent, 'emit');
 
     addItemButton.triggerEventHandler('click', {});
@@ -118,7 +118,7 @@ describe('AddItemComponent', () => {
   });
 
   it('should emit item being added event when cancel add button is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
 
@@ -130,7 +130,7 @@ describe('AddItemComponent', () => {
   });
 
   it('should not call service when save is clicked with empty form value', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
 
@@ -143,7 +143,7 @@ describe('AddItemComponent', () => {
   });
 
   it('should call service when save is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
 
@@ -158,7 +158,7 @@ describe('AddItemComponent', () => {
   });
 
   it('should emit updated shopping list when save is clicked', () => {
-    const addItemButton = de.query(By.css('#add-item-button'));
+    const addItemButton = de.query(By.css('.add-item-button'));
     addItemButton.triggerEventHandler('click', {});
     fixture.detectChanges();
 

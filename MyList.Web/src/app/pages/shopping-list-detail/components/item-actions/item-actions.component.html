@@ -1,5 +1,5 @@
 <div *ngIf ="item === selectedItem" class="actions-container">
-  <div *ngIf="item.id !== itemUnderEditId" class="action-buttons">
+  <div *ngIf="item.id !== itemUnderEditId">
     <button mat-icon-button color="primary" (click)="itemUnderEdit(item.id)" [disabled]="item.isChecked" id="edit-item-button">
       <mat-icon>edit</mat-icon>
     </button>
@@ -7,7 +7,7 @@
       <mat-icon>delete_outline</mat-icon>
     </button>
   </div>
-  <div *ngIf="item.id === itemUnderEditId" class="action-buttons">
+  <div *ngIf="item.id === itemUnderEditId">
     <button mat-icon-button color="warn" (click)="unselectItem(item.id)" id="cancel-item-edit-button">
       <mat-icon>close</mat-icon>
     </button>

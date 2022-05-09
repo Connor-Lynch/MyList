@@ -1,5 +1,4 @@
-<div class="page-container">
-
+<div>
   <div class="card-list-container">
     <mat-card *ngFor="let shoppingList of shoppingLists$ | async" class="card" id="view-button">
       <div id="card-body" [routerLink]="['/shopping-list-detail', shoppingList.id]">
@@ -20,7 +19,6 @@
       </mat-card-actions>
     </mat-card>
   </div>
-
   <div class="add-fab">
     <button mat-fab color="primary" (click)="toggleListAdd()" id="add-list-button">
       <mat-icon>add</mat-icon>
