@@ -6,7 +6,7 @@ import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListItem } from 'src/app/models/shopping-list-item';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import { take } from 'rxjs/operators';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-shopping-list-detail',
@@ -26,7 +26,7 @@ export class ShoppingListDetailComponent {
     private activatedRoute: ActivatedRoute,
     public shoppingListService: ShoppingListService,
     public shoppingListItemService: ShoppingListItemService,
-    public formBuilder: FormBuilder
+    public formBuilder: UntypedFormBuilder
   ) {
     const shoppingListId = this.activatedRoute.snapshot.paramMap.get('shoppingListId');
     this.shoppingList$ = this.shoppingListService.getShoppingListById(shoppingListId);

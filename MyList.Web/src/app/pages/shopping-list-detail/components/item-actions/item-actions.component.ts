@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ShoppingListItem } from 'src/app/models/shopping-list-item';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import { take } from 'rxjs/operators';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-item-actions',
@@ -16,7 +16,7 @@ export class ItemActionsComponent {
 
   @Input() item: ShoppingListItem;
   @Input() selectedItem: ShoppingListItem;
-  @Input() editItemForm: FormGroup;
+  @Input() editItemForm: UntypedFormGroup;
   @Input() shoppingList$: Observable<ShoppingList>;
 
   @Output() itemUnselectedEvent = new EventEmitter();

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -26,7 +26,7 @@ export class AddItemComponent {
   constructor(
     private activatedRoute: ActivatedRoute,
     public shoppingListItemService: ShoppingListItemService,
-    public formBuilder: FormBuilder
+    public formBuilder: UntypedFormBuilder
   ) {
     this.shoppingListId = this.activatedRoute.snapshot.paramMap.get('shoppingListId');
   }

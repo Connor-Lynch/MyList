@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
@@ -48,7 +48,7 @@ describe('ItemActionsComponent', () => {
     component.selectedItem = mockShoppingListItem;
     component.shoppingList$ = of(mockShoppingList);
 
-    const formBuilder = new FormBuilder();
+    const formBuilder = new UntypedFormBuilder();
     component.editItemForm = formBuilder.group({
       newItemName: ['']
     });

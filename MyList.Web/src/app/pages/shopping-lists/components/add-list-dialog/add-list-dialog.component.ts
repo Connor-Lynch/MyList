@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class AddListDialogComponent {
     public shoppingListService: ShoppingListService,
     private router: Router,
     public dialogRef: MatDialogRef<AddListDialogComponent>,
-    public formBuilder: FormBuilder
+    public formBuilder: UntypedFormBuilder
   ) { }
 
   saveNewList() {

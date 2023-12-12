@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ShoppingList } from 'src/app/models/shopping-list';
@@ -24,7 +24,7 @@ export class ListDetailHeaderComponent {
 
   constructor(
     public shoppingListService: ShoppingListService,
-    public formBuilder: FormBuilder
+    public formBuilder: UntypedFormBuilder
   ) { }
 
   editListName() {
