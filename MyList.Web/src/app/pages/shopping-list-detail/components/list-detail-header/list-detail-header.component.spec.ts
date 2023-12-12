@@ -1,13 +1,13 @@
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
 import { ListDetailHeaderComponent } from './list-detail-header.component';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('ListDetailHeaderComponent', () => {
   let component: ListDetailHeaderComponent;

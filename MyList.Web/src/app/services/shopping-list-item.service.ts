@@ -4,8 +4,8 @@ import { Observable } from "rxjs";
 import { ShoppingList } from "../models/shopping-list";
 import { ShoppingListItem } from "../models/shopping-list-item";
 import { AppConfiguration } from "read-appsettings-json";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { catchError } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'

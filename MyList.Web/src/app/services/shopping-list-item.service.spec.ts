@@ -1,8 +1,8 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { ShoppingListItemBuilder } from "../test/builders/shopping-list-item.builder";
 import { ShoppingListItemService } from "./shopping-list-item.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 describe('ShoppingListService', () => {
   let service: ShoppingListItemService;

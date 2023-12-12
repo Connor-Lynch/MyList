@@ -5,13 +5,13 @@ import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testi
 import { ShoppingListsPage } from './shopping-lists.page';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Location } from '@angular/common';
 import { ConfirmationDialogComponent } from 'src/app/components/confirmation-dialog/confirmation-dialog.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import {MatCardModule} from '@angular/material/card';
 
 describe('ShoppingListsPage', () => {
   let component: ShoppingListsPage;

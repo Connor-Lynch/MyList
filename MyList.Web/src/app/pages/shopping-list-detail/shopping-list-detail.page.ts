@@ -13,7 +13,7 @@ import { UntypedFormBuilder } from '@angular/forms';
   templateUrl: './shopping-list-detail.page.html',
   styleUrls: ['./shopping-list-detail.page.scss']
 })
-export class ShoppingListDetailComponent {
+export class ShoppingListDetailPage {
   public editItemForm = this.formBuilder.group({
     newItemName: ['']
   });

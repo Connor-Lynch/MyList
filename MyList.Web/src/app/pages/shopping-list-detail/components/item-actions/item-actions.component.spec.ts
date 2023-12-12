@@ -1,7 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UntypedFormBuilder } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
@@ -9,6 +8,7 @@ import { ShoppingListItemService } from 'src/app/services/shopping-list-item.ser
 import { ShoppingListItemBuilder } from 'src/app/test/builders/shopping-list-item.builder';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
 import { ItemActionsComponent } from './item-actions.component';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('ItemActionsComponent', () => {
   let component: ItemActionsComponent;

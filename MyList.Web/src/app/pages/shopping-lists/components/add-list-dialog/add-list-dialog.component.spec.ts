@@ -5,11 +5,11 @@ import { CUSTOM_ELEMENTS_SCHEMA, Type, DebugElement } from '@angular/core';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
 import { of } from 'rxjs';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
-import { MatDialogRef } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('AddItemDialogComponent', () => {
   let component: AddListDialogComponent;

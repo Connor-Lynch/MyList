@@ -3,21 +3,21 @@ import { ShoppingListItemBuilder } from './../../test/builders/shopping-list-ite
 import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
-import { ShoppingListDetailComponent } from './shopping-list-detail.page';
 import { of } from 'rxjs';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ShoppingListDetailPage } from './shopping-list-detail.page';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 describe('ShoppingListDetailComponent', () => {
-  let component: ShoppingListDetailComponent;
-  let fixture: ComponentFixture<ShoppingListDetailComponent>;
+  let component: ShoppingListDetailPage;
+  let fixture: ComponentFixture<ShoppingListDetailPage>;
   let de: DebugElement;
   let shoppingListServiceSpy: jasmine.SpyObj<ShoppingListService>;
   let shoppingListItemServiceSpy: jasmine.SpyObj<ShoppingListItemService>;
@@ -35,7 +35,7 @@ describe('ShoppingListDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ShoppingListDetailComponent ],
+      declarations: [ ShoppingListDetailPage ],
       providers: [
         { provide: ActivatedRoute, useValue: mockActiveRoute },
         { provide: ShoppingListService, useValue: jasmine.createSpyObj<ShoppingListService>('ShoppingListService', ['getShoppingListById']) },
@@ -64,7 +64,7 @@ describe('ShoppingListDetailComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ShoppingListDetailComponent);
+    fixture = TestBed.createComponent(ShoppingListDetailPage);
     component = fixture.componentInstance;
     de = fixture.debugElement;
 

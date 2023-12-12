@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, of } from "rxjs";
 import { ShoppingList } from "../models/shopping-list";
 import { catchError, shareReplay, tap } from "rxjs/operators";
 import { AppConfiguration } from "read-appsettings-json";
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'

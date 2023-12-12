@@ -1,9 +1,9 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { BackButtonComponent } from './back-button.component';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('BackButtonComponent', () => {
   let component: BackButtonComponent;
