@@ -1,27 +1,25 @@
-<div>
-  <div class="card-list-container">
-    <mat-card *ngFor="let shoppingList of shoppingLists$ | async" class="card" id="view-button">
-      <div id="card-body" [routerLink]="['/shopping-list-detail', shoppingList.id]">
-        <mat-card-title class="list-name">
-          {{ shoppingList.name }}
-        </mat-card-title>
-        <mat-divider [inset]="true"></mat-divider>
-        <mat-card-content class="list-overview">
-          <app-list-overview
-            [items]="shoppingList.items"
-          ></app-list-overview>
-        </mat-card-content>
-      </div>
-      <mat-card-actions class="card-actions">
-        <button mat-icon-button color="warn" (click)="deleteShoppingList(shoppingList.id)" id="delete-button">
-          <mat-icon>delete_outline</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
-  <div class="add-fab">
-    <button mat-fab color="primary" (click)="toggleListAdd()" id="add-list-button">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
+<div class="card-list-container flex flex-wrap overflow-y-auto mx-5">
+  <mat-card *ngFor="let shoppingList of shoppingLists$ | async" class="card m-3 cursor-pointer" id="view-button">
+    <div id="card-body" [routerLink]="['/shopping-list-detail', shoppingList.id]">
+      <mat-card-title class="p-3">
+        {{ shoppingList.name }}
+      </mat-card-title>
+      <mat-divider class="mx-3"></mat-divider>
+      <mat-card-content class="list-overview mt-3">
+        <app-list-overview
+          [items]="shoppingList.items"
+        ></app-list-overview>
+      </mat-card-content>
+    </div>
+    <mat-card-actions class="card-actions flex justify-content-end">
+      <button mat-icon-button color="warn" (click)="deleteShoppingList(shoppingList.id)" id="delete-button">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<div class="add-fab fixed cursor-pointer">
+  <button mat-fab color="primary" (click)="toggleListAdd()" id="add-list-button">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>

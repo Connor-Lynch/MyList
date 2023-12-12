@@ -1,29 +1,7 @@
 .card-list-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  margin: 5%;
-  overflow-y: auto;
-
   .card {
     width: 40%;
     height: 20%;
-    margin: 2%;
-    cursor: pointer;
-
-    .list-name {
-      margin-bottom: 5%;
-    }
-
-    .list-overview {
-      height: 100%;
-      margin-top: 5%;
-    }
-
-    .card-actions {
-      display: flex;
-      justify-content: end;
-    }
   }
 
   @media only screen and (max-width: 600px) {
@@ -35,8 +13,6 @@
 }
 
 .add-fab {
-  position:fixed;
   bottom:5%;
   right:5%;
-  cursor:pointer;
 }

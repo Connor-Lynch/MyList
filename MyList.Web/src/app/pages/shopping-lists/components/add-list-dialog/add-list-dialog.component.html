@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container p-3">
   <form [formGroup]="addListForm" (ngSubmit)="saveNewList()">
     <mat-form-field class="add-form">
       <mat-label>List Name</mat-label>
@@ -7,7 +7,7 @@
         formControlName="listName">
     </mat-form-field>
   </form>
-  <div class="actions">
+  <div class="flex justify-content-between">
     <button mat-stroked-button color="warn" (click)="cancel()" id="cancel-button">Cancel</button>
     <button mat-raised-button color="primary" (click)="saveNewList()" id="save-button">Save</button>
   </div>
