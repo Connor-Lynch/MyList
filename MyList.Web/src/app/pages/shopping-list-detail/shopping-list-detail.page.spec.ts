@@ -19,6 +19,8 @@ describe('ShoppingListDetailComponent', () => {
   let component: ShoppingListDetailComponent;
   let fixture: ComponentFixture<ShoppingListDetailComponent>;
   let de: DebugElement;
+  let shoppingListServiceSpy: jasmine.SpyObj<ShoppingListService>;
+  let shoppingListItemServiceSpy: jasmine.SpyObj<ShoppingListItemService>;
 
   const mockActiveRoute = {
     snapshot: {
@@ -30,20 +32,14 @@ describe('ShoppingListDetailComponent', () => {
 
   const mockShoppingListItem = ShoppingListItemBuilder.create().build();
   const mockShoppingList = ShoppingListBuilder.create().withId(mockShoppingListItem.shoppingListId).withItems([mockShoppingListItem]).build();
-  const mockShoppingListService = {
-    getShoppingListById() { return of(mockShoppingList) }
-  }
-  const mockShoppingListItemService = {
-    updateShoppingListItem() { return of(mockShoppingList) }
-  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ShoppingListDetailComponent ],
       providers: [
         { provide: ActivatedRoute, useValue: mockActiveRoute },
-        { provide: ShoppingListService, useValue: mockShoppingListService },
-        { provide: ShoppingListItemService, useValue: mockShoppingListItemService }
+        { provide: ShoppingListService, useValue: jasmine.createSpyObj<ShoppingListService>('ShoppingListService', ['getShoppingListById']) },
+        { provide: ShoppingListItemService, useValue: jasmine.createSpyObj<ShoppingListItemService>('ShoppingListItemService', ['updateShoppingListItem']) }
       ],
       imports: [
         RouterTestingModule.withRoutes([]),
@@ -59,6 +55,12 @@ describe('ShoppingListDetailComponent', () => {
       ]
     })
     .compileComponents();
+
+    shoppingListServiceSpy = TestBed.inject(ShoppingListService) as jasmine.SpyObj<ShoppingListService>;
+    shoppingListItemServiceSpy = TestBed.inject(ShoppingListItemService) as jasmine.SpyObj<ShoppingListItemService>;
+
+    shoppingListServiceSpy.getShoppingListById.and.returnValue(of(mockShoppingList));
+    shoppingListItemServiceSpy.updateShoppingListItem.and.returnValue(of(mockShoppingList));
   });
 
   beforeEach(() => {
@@ -75,112 +77,113 @@ describe('ShoppingListDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a back button', () => {
-    const backButton = de.query(By.css('.back-button'));
+  describe('template', () => {
+    it('should have a back button', () => {
+      const backButton = de.query(By.css('.back-button'));
 
-    expect(backButton).toBeTruthy();
-  });
+      expect(backButton).toBeTruthy();
+    });
 
-  it('should display item', () => {
-    const item = de.query(By.css('.list-item'));
+    it('should display item', () => {
+      const item = de.query(By.css('.list-item'));
 
-    expect(item).toBeTruthy();
-  });
+      expect(item).toBeTruthy();
+    });
 
-  it('should display item checkbox', () => {
-    const itemCheckbox = de.query(By.css('#item-checkbox-1'));
+    it('should display item checkbox', () => {
+      const itemCheckbox = de.query(By.css('#item-checkbox-1'));
 
-    expect(itemCheckbox).toBeTruthy();
-  });
+      expect(itemCheckbox).toBeTruthy();
+    });
 
-  it('should disable item checkbox when edit is in progress', () => {
-    component.editInProgress = true;
-    fixture.detectChanges();
+    it('should disable item checkbox when edit is in progress', () => {
+      component.editInProgress = true;
+      fixture.detectChanges();
 
-    const itemCheckbox = de.query(By.css('#item-checkbox-1'));
+      const itemCheckbox = de.query(By.css('#item-checkbox-1'));
 
-    expect(itemCheckbox.attributes['class']).toContain('mat-checkbox-disabled');
-  });
+      expect(itemCheckbox.attributes['class']).toContain('mat-checkbox-disabled');
+    });
 
-  it('should show item actions when item is selected', () => {
-    const itemToSelect = de.query(By.css('.selectable-item'));
+    it('should show item actions when item is selected', () => {
+      const itemToSelect = de.query(By.css('.selectable-item'));
 
-    itemToSelect.triggerEventHandler('click', {});
+      itemToSelect.triggerEventHandler('click', {});
 
-    const itemActions = de.query(By.css('.item-actions'));
+      const itemActions = de.query(By.css('.item-actions'));
 
-    expect(itemActions).toBeTruthy();
-  });
+      expect(itemActions).toBeTruthy();
+    });
 
-  it('should show add item component', () => {
-    const addItem = de.query(By.css('.add-item'));
+    it('should show add item component', () => {
+      const addItem = de.query(By.css('.add-item'));
 
-    expect(addItem).toBeTruthy();
-  });
+      expect(addItem).toBeTruthy();
+    });
 
-  it('should set selectedItem when and item is clicked', () => {
-    const itemInList = de.query(By.css('.selectable-item'));
+    it('should set selectedItem when and item is clicked', () => {
+      const itemInList = de.query(By.css('.selectable-item'));
 
-    itemInList.triggerEventHandler('click', {});
-    fixture.detectChanges();
+      itemInList.triggerEventHandler('click', {});
+      fixture.detectChanges();
 
-    expect(component.selectedItem).toEqual(mockShoppingListItem);
-  });
+      expect(component.selectedItem).toEqual(mockShoppingListItem);
+    });
 
-  it('should unselect item when it is clicked twice', () => {
-    let itemInList = de.query(By.css('.selectable-item'));
-    itemInList.triggerEventHandler('click', {});
-    fixture.detectChanges();
+    it('should unselect item when it is clicked twice', () => {
+      let itemInList = de.query(By.css('.selectable-item'));
+      itemInList.triggerEventHandler('click', {});
+      fixture.detectChanges();
 
-    expect(component.selectedItem).toEqual(mockShoppingListItem);
+      expect(component.selectedItem).toEqual(mockShoppingListItem);
 
-    itemInList = de.query(By.css('.selectable-item'));
-    itemInList.triggerEventHandler('click', {});
-    fixture.detectChanges();
+      itemInList = de.query(By.css('.selectable-item'));
+      itemInList.triggerEventHandler('click', {});
+      fixture.detectChanges();
 
-    expect(component.selectedItem).toEqual(null);
-  });
+      expect(component.selectedItem).toEqual(null);
+    });
 
-  it('should show edit form when item under edit is set', () => {
-    let editItemForm = de.query(By.css('.edit-item-form'));
+    it('should show edit form when item under edit is set', () => {
+      let editItemForm = de.query(By.css('.edit-item-form'));
 
-    expect(editItemForm).toBeFalsy();
+      expect(editItemForm).toBeFalsy();
 
-    component.selectedItem = mockShoppingListItem;
-    component.itemUnderEdit('1');
-    fixture.detectChanges();
+      component.selectedItem = mockShoppingListItem;
+      component.itemUnderEdit('1');
+      fixture.detectChanges();
 
-    editItemForm = de.query(By.css('.edit-item-form'));
+      editItemForm = de.query(By.css('.edit-item-form'));
 
-    expect(editItemForm).toBeTruthy();
-  });
+      expect(editItemForm).toBeTruthy();
+    });
 
-  it('should set selectedItem and editItemId to null item is no longer under edit', () => {
-    component.selectedItem = mockShoppingListItem;
-    component.itemUnderEditId = mockShoppingListItem.id;
+    it('should set selectedItem and editItemId to null item is no longer under edit', () => {
+      component.selectedItem = mockShoppingListItem;
+      component.itemUnderEditId = mockShoppingListItem.id;
 
-    component.editEvent(false);
+      component.editEvent(false);
 
-    expect(component.selectedItem).toBeNull();
-    expect(component.itemUnderEditId).toBeNull();
-  });
+      expect(component.selectedItem).toBeNull();
+      expect(component.itemUnderEditId).toBeNull();
+    });
 
-  it('should not allow item selection when item is being added', () => {
-    component.editEvent(true);
+    it('should not allow item selection when item is being added', () => {
+      component.editEvent(true);
 
-    let itemInList = de.query(By.css('.selectable-item'));
-    itemInList.triggerEventHandler('click', {});
-    fixture.detectChanges();
+      let itemInList = de.query(By.css('.selectable-item'));
+      itemInList.triggerEventHandler('click', {});
+      fixture.detectChanges();
 
-    expect(component.selectedItem).not.toEqual(mockShoppingListItem);
-  });
+      expect(component.selectedItem).not.toEqual(mockShoppingListItem);
+    });
 
-  it('should call service when item is checked', () => {
-    const itemCheckbox = de.query(By.css('#item-checkbox-1'));
-    const serviceSpy = spyOn(component.shoppingListItemService, 'updateShoppingListItem');
+    it('should call service when item is checked', () => {
+      const itemCheckbox = de.query(By.css('#item-checkbox-1'));
 
-    itemCheckbox.triggerEventHandler('change', {});
+      itemCheckbox.triggerEventHandler('change', {});
 
-    expect(serviceSpy).toHaveBeenCalled();
+      expect(shoppingListItemServiceSpy.updateShoppingListItem).toHaveBeenCalled();
+    });
   });
 });

@@ -18,12 +18,9 @@ describe('ShoppingListsPage', () => {
   let fixture: ComponentFixture<ShoppingListsPage>;
   let de: DebugElement;
   let location: Location;
+  let shoppingListServiceSpy: jasmine.SpyObj<ShoppingListService>;
 
   const mockShoppingList = ShoppingListBuilder.create().build();
-  const mockShoppingListService = {
-    getAllShoppingLists() { return of([mockShoppingList]) },
-    removeShoppingList() { return of([mockShoppingList])  }
-  }
 
   const mockDialog = {
     open() { },
@@ -34,7 +31,7 @@ describe('ShoppingListsPage', () => {
     TestBed.configureTestingModule({
       declarations: [ ShoppingListsPage ],
       providers: [
-        { provide: ShoppingListService, useValue: mockShoppingListService },
+        { provide: ShoppingListService, useValue: jasmine.createSpyObj<ShoppingListService>('ShoppingListService', ['getAllShoppingLists', 'removeShoppingList']) },
         { provide: MatDialog, useValue: mockDialog }
       ],
       imports: [
@@ -51,6 +48,10 @@ describe('ShoppingListsPage', () => {
       ]
     })
     .compileComponents();
+
+    shoppingListServiceSpy = TestBed.inject(ShoppingListService) as jasmine.SpyObj<ShoppingListService>;
+    shoppingListServiceSpy.getAllShoppingLists.and.returnValue(of([mockShoppingList]));
+    shoppingListServiceSpy.removeShoppingList.and.returnValue(of(mockShoppingList));
   });
 
   beforeEach(() => {
@@ -65,79 +66,78 @@ describe('ShoppingListsPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a card for shopping list', () => {
-    const shoppingListCard = de.query(By.css('.card'));
+  describe('template', () => {
+    it('should have a card for shopping list', () => {
+      const shoppingListCard = de.query(By.css('.card'));
 
-    expect(shoppingListCard).toBeTruthy();
-  });
+      expect(shoppingListCard).toBeTruthy();
+    });
 
-  it('should have a delete button on shopping list card', () => {
-    const deleteButton = de.query(By.css('#delete-button'));
+    it('should have a delete button on shopping list card', () => {
+      const deleteButton = de.query(By.css('#delete-button'));
 
-    expect(deleteButton).toBeTruthy();
-  });
+      expect(deleteButton).toBeTruthy();
+    });
 
-  it('should have a add list button', () => {
-    const addButton = de.query(By.css('#add-list-button'));
+    it('should have a add list button', () => {
+      const addButton = de.query(By.css('#add-list-button'));
 
-    expect(addButton).toBeTruthy();
-  });
+      expect(addButton).toBeTruthy();
+    });
 
-  it('should display list overview on card', () => {
-    const listOverview = de.query(By.css('.list-overview'));
+    it('should display list overview on card', () => {
+      const listOverview = de.query(By.css('.list-overview'));
 
-    expect(listOverview).toBeTruthy();
-  });
+      expect(listOverview).toBeTruthy();
+    });
 
-  it('should open dialog when delete is clicked', () => {
-    const deleteButton = de.query(By.css('#delete-button'));
-    const dialogSpy = spyOn(component.dialog, 'open');
+    it('should open dialog when delete is clicked', () => {
+      const deleteButton = de.query(By.css('#delete-button'));
+      const dialogSpy = spyOn(component.dialog, 'open');
 
-    deleteButton.triggerEventHandler('click', {});
+      deleteButton.triggerEventHandler('click', {});
 
-    expect(dialogSpy).toHaveBeenCalled();
-  });
+      expect(dialogSpy).toHaveBeenCalled();
+    });
 
-  it('should call service when delete is clicked and dialog passes affirmative result', () => {
-    const deleteButton = de.query(By.css('#delete-button'));
-    spyOn(component.dialog, 'open').and.returnValue(
-      {afterClosed: () => of(true)} as MatDialogRef<ConfirmationDialogComponent>
-    );
-    const serviceSpy = spyOn(component.shoppingListService, 'removeShoppingList');
+    it('should call service when delete is clicked and dialog passes affirmative result', () => {
+      const deleteButton = de.query(By.css('#delete-button'));
+      spyOn(component.dialog, 'open').and.returnValue(
+        {afterClosed: () => of(true)} as MatDialogRef<ConfirmationDialogComponent>
+      );
+      deleteButton.triggerEventHandler('click', {});
 
-    deleteButton.triggerEventHandler('click', {});
+      expect(shoppingListServiceSpy.removeShoppingList).toHaveBeenCalledWith('1');
+    });
 
-    expect(serviceSpy).toHaveBeenCalledWith('1');
-  });
+    it('should not call service when delete is clicked and dialog passes negative result', () => {
+      const deleteButton = de.query(By.css('#delete-button'));
+      spyOn(component.dialog, 'open').and.returnValue(
+        {afterClosed: () => of(false)} as MatDialogRef<ConfirmationDialogComponent>
+      );
 
-  it('should not call service when delete is clicked and dialog passes negative result', () => {
-    const deleteButton = de.query(By.css('#delete-button'));
-    spyOn(component.dialog, 'open').and.returnValue(
-      {afterClosed: () => of(false)} as MatDialogRef<ConfirmationDialogComponent>
-    );
-    const serviceSpy = spyOn(component.shoppingListService, 'removeShoppingList');
+      deleteButton.triggerEventHandler('click', {});
 
-    deleteButton.triggerEventHandler('click', {});
+      expect(shoppingListServiceSpy.removeShoppingList).not.toHaveBeenCalled();
+    });
 
-    expect(serviceSpy).not.toHaveBeenCalled();
-  });
+    it('should route to list details on card click', fakeAsync(() => {
+      const shoppingListCard = de.query(By.css('#card-body'));
 
-  it('should route to list details on card click', fakeAsync(() => {
-    const shoppingListCard = de.query(By.css('#card-body'));
+      shoppingListCard.triggerEventHandler('click', {});
 
-    shoppingListCard.triggerEventHandler('click', {});
+      flush();
 
-    flush();
+      expect(location.path()).toBe('/shopping-list-detail/1');
+    }));
 
-    expect(location.path()).toBe('/shopping-list-detail/1');
-  }));
+    it('should open add dialog when add button is clicked', () => {
+      const addButton = de.query(By.css('#add-list-button'));
+      const dialogSpy = spyOn(component.dialog, 'open');
 
-  it('should open add dialog when add button is clicked', () => {
-    const addButton = de.query(By.css('#add-list-button'));
-    const dialogSpy = spyOn(component.dialog, 'open');
+      addButton.triggerEventHandler('click', {});
 
-    addButton.triggerEventHandler('click', {});
-
-    expect(dialogSpy).toHaveBeenCalled();
+      expect(dialogSpy).toHaveBeenCalled();
+    });
   });
 });
