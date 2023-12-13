@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import { AppRoutes } from 'src/app/models/app-routes';
 
 describe('ShoppingListsPage', () => {
   let component: ShoppingListsPage;
@@ -36,7 +37,7 @@ describe('ShoppingListsPage', () => {
       ],
       imports: [
         RouterTestingModule.withRoutes([
-          { path: 'shopping-list-detail/1', component: {} as Type<any> }
+          { path: `${AppRoutes.shoppingList.route}/1`, component: {} as Type<any> }
         ]),
         MatCardModule,
         MatButtonModule,
@@ -128,7 +129,7 @@ describe('ShoppingListsPage', () => {
 
       flush();
 
-      expect(location.path()).toBe('/shopping-list-detail/1');
+      expect(location.path()).toBe(`/${AppRoutes.shoppingList.route}/1`);
     }));
 
     it('should open add dialog when add button is clicked', () => {

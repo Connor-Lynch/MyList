@@ -7,6 +7,7 @@ import { take } from 'rxjs/operators';
 import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { MatDialog } from '@angular/material/dialog';
+import { AppRoutes } from 'src/app/models/app-routes';
 
 @Component({
   selector: 'app-shopping-lists',
@@ -15,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ShoppingListsPage implements OnInit {
   shoppingLists$: Observable<ShoppingList[]>;
+  public readonly appRoutes = AppRoutes;
 
   constructor(
     public shoppingListService: ShoppingListService,

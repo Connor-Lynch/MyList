@@ -1,0 +1,20 @@
+<div>
+  <div *ngIf="!isEditing" class="flex justify-content-between align-content-center">
+    <h1 class="m-0">{{ formGroup.controls[controlName].value }}</h1>
+    <button mat-icon-button color="primary" [disabled]="externalEditInProgress" (click)="edit()" id="edit-button">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="isEditing" class="flex justify-content-between align-content-center">
+    <form [formGroup]="formGroup" (ngSubmit)="acceptEdit()" class="w-full">
+      <mat-form-field class="w-full">
+        <input matInput type="text" [formControlName]="controlName" class="form-input">
+      </mat-form-field>
+    </form>
+    <app-actions
+      (acceptEvent)="acceptEdit()"
+      (declineEvent)="cancelEdit()"
+    ></app-actions>
+  </div>
+</div>
+<mat-divider></mat-divider>

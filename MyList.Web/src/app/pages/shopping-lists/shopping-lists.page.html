@@ -1,6 +1,6 @@
 <div class="card-list-container flex flex-wrap overflow-y-auto mx-5">
   <mat-card *ngFor="let shoppingList of shoppingLists$ | async" class="card m-3 cursor-pointer" id="view-button">
-    <div id="card-body" [routerLink]="['/shopping-list-detail', shoppingList.id]">
+    <div id="card-body" [routerLink]="['/' + appRoutes.shoppingList.route, shoppingList.id]">
       <mat-card-title class="p-3">
         {{ shoppingList.name }}
       </mat-card-title>
