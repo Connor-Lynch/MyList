@@ -2,6 +2,7 @@
   <mat-checkbox
     class="col-1"
     [formControlName]="formFields.IsChecked"
+    [disabled]="!!listState.itemUnderEditId"
   ></mat-checkbox>
   <ng-container [ngTemplateOutlet]="view" *ngIf="!isUnderEdit()"></ng-container>
   <ng-container [ngTemplateOutlet]="edit" *ngIf="isUnderEdit()"></ng-container>
@@ -9,10 +10,12 @@
 
 <ng-template #view>
   <p class="m-0 pl-1 col-8"
+    id="view-item-name"
     [class.line-through]="formGroup.controls[formFields.IsChecked].value"
     (click)="selectItem()"
   >{{formGroup.controls[formFields.Name].value}}</p>
   <app-actions
+    id="select-actions"
     *ngIf="isSelected()"
     class="col-3"
     acceptIcon="edit"
@@ -25,12 +28,13 @@
 
 <ng-template #edit>
   <form [formGroup]="formGroup" (ngSubmit)="acceptEdit()" class="m-0 pl-1 col-8">
-    <mat-form-field class="form-field w-full">
+    <mat-form-field class="w-full" id="edit-name">
       <input matInput type="text" [formControlName]="formFields.Name">
     </mat-form-field>
   </form>
   <app-actions
     class="col-3"
+    id="edit-actions"
     (acceptEvent)="acceptEdit()"
     (declineEvent)="cancelEdit()"
   ></app-actions>

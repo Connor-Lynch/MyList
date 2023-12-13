@@ -10,6 +10,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
 import { of } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ItemComponent', () => {
   let component: ItemComponent;
@@ -21,8 +25,11 @@ describe('ItemComponent', () => {
       declarations: [ ItemComponent, ActionsStubComponent ],
       imports: [
         MatCheckboxModule,
+        MatFormFieldModule,
+        MatInputModule,
         FormsModule,
         ReactiveFormsModule,
+        NoopAnimationsModule
       ],
       providers: [
         { provide: ShoppingListItemService, useValue: jasmine.createSpyObj<ShoppingListItemService>('ShoppingListItemService', ['updateShoppingListItem', 'removeShoppingListItem']) },
@@ -440,6 +447,110 @@ describe('ItemComponent', () => {
 
       // Assert
       expect(component.formGroup.enabled).toBeTruthy();
+    });
+  });
+
+  describe('template', () => {
+    it('should render checkbox', () => {
+      // Act
+      const checkbox = fixture.debugElement.nativeElement.querySelector('mat-checkbox');
+
+      // Assert
+      expect(checkbox).toBeTruthy();
+    });
+
+    describe('view', () => {
+      it('should render item name', () => {
+        // Act
+        const itemName = fixture.debugElement.query(By.css('#view-item-name'));
+
+        // Assert
+        expect(itemName).toBeTruthy();
+      });
+
+      describe('item checked', () => {
+        it('should strike though item name', () => {
+          // Arrange
+          component.formGroup.controls[ItemFormFields.IsChecked].setValue(true);
+          fixture.detectChanges();
+
+          // Act
+          const itemName = fixture.debugElement.query(By.css('#view-item-name'));
+
+          // Assert
+          expect(itemName.classes['line-through']).toBeTruthy();
+        });
+      });
+
+      describe('item not checked', () => {
+        it('should not strike though item name', () => {
+          // Arrange
+          component.formGroup.controls[ItemFormFields.IsChecked].setValue(false);
+          fixture.detectChanges();
+
+          // Act
+          const itemName = fixture.debugElement.query(By.css('#view-item-name'));
+
+          // Assert
+          expect(itemName.classes['line-through']).toBeFalsy();
+        });
+      });
+
+      describe('item not selected', () => {
+        it('should not render select actions when item is not selected', () => {
+          // Act
+          const actions = fixture.debugElement.query(By.css('#select-actions'));
+
+          // Assert
+          expect(actions).toBeFalsy();
+        });
+      });
+
+      describe('item selected', () => {
+        let mockItem = ShoppingListItemBuilder.create().build();
+
+        beforeEach(() => {
+          component.writeValue(mockItem);
+        });
+
+        it('should render select actions when item is selected', () => {
+          // Arrange
+          component.listState.trySelectItem(mockItem.id);
+          fixture.detectChanges();
+
+          // Act
+          const actions = fixture.debugElement.query(By.css('#select-actions'));
+
+          // Assert
+          expect(actions).toBeTruthy();
+        });
+      });
+    });
+
+    describe('edit', () => {
+      let mockItem = ShoppingListItemBuilder.create().build();
+
+      beforeEach(() => {
+        component.writeValue(mockItem);
+        component.listState.tryEditItem(mockItem.id);
+        fixture.detectChanges();
+      });
+
+      it('should render form field', () => {
+        // Act
+        const editItem = fixture.debugElement.query(By.css('#edit-name'));
+
+        // Assert
+        expect(editItem).toBeTruthy();
+      });
+
+      it('should render edit actions', () => {
+        // Act
+        const actions = fixture.debugElement.query(By.css('#edit-actions'));
+
+        // Assert
+        expect(actions).toBeTruthy();
+      });
     });
   });
 });
