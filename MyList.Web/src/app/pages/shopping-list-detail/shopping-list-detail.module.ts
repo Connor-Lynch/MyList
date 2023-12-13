@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { ShoppingListDetailPage } from './shopping-list-detail.page';
+import { ItemComponent } from './components/item/item.component';
+import { ActionsComponent } from './components/actions/actions.component';
 
 const routes: Routes = [
   {
@@ -38,6 +40,6 @@ const routes: Routes = [
     ListDetailHeaderModule,
     BackButtonModule
   ],
-  declarations: [ShoppingListDetailPage]
+  declarations: [ShoppingListDetailPage, ItemComponent, ActionsComponent]
 })
 export class ShoppingListDetailModule {}

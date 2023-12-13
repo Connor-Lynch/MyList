@@ -79,7 +79,7 @@ describe('ShoppingListDetailComponent', () => {
 
   describe('template', () => {
     it('should have a back button', () => {
-      const backButton = de.query(By.css('.back-button'));
+      const backButton = de.nativeElement.querySelector('app-back-button');
 
       expect(backButton).toBeTruthy();
     });
@@ -102,7 +102,7 @@ describe('ShoppingListDetailComponent', () => {
 
       const itemCheckbox = de.query(By.css('#item-checkbox-1'));
 
-      expect(itemCheckbox.attributes['class']).toContain('mat-checkbox-disabled');
+      expect(itemCheckbox.attributes['class']).toContain('mat-mdc-checkbox-disabled');
     });
 
     it('should show item actions when item is selected', () => {
