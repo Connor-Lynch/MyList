@@ -8,6 +8,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 export class ActionsStubComponent {
   @Input() acceptIcon: string;
   @Input() declineIcon: string;
+  @Input() acceptLast: boolean;
 
   @Output() acceptEvent = new EventEmitter<void>();
   @Output() declineEvent = new EventEmitter<void>();
@@ -36,4 +37,43 @@ export class ListNameStubComponent implements ControlValueAccessor {
   template: '',
 })
 export class BackButtonStubComponent {
+}
+
+@Component({
+  selector: 'app-items',
+  template: '',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ItemsStubComponent),
+      multi: true,
+    },
+  ],
+})
+export class ItemsStubComponent implements ControlValueAccessor {
+  writeValue(obj: any): void {}
+  registerOnChange(fn: any): void {}
+  registerOnTouched(fn: any): void {}
+  setDisabledState?(isDisabled: boolean): void {}
+}
+
+@Component({
+  selector: 'app-item',
+  template: '',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ItemStubComponent),
+      multi: true,
+    },
+  ],
+})
+export class ItemStubComponent implements ControlValueAccessor {
+  @Input() listState: any;
+  @Output() listStateChange = new EventEmitter<any>();
+
+  writeValue(obj: any): void {}
+  registerOnChange(fn: any): void {}
+  registerOnTouched(fn: any): void {}
+  setDisabledState?(isDisabled: boolean): void {}
 }

@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-list-name',
@@ -14,13 +13,12 @@ import { Subject } from 'rxjs';
     },
   ],
 })
-export class ListNameComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class ListNameComponent implements OnInit, ControlValueAccessor {
   public formGroup: FormGroup;
   public readonly controlName = 'name';
   public isEditing: boolean;
 
   private pristineValue: string;
-  private destroy$ = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -28,11 +26,6 @@ export class ListNameComponent implements OnInit, OnDestroy, ControlValueAccesso
     this.formGroup = this.formBuilder.group({
       [this.controlName]: []
     });
-  }
-
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   public edit(): void {

@@ -1,0 +1,7 @@
+<div *ngFor="let item of itemsControl.value; let index = index;">
+  <app-item
+    [(ngModel)]="itemsControl.value[index]"
+    [(listState)]="listState"
+    [registerOnChange]="itemChanged()"
+  ></app-item>
+</div>

@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { AppRoutes } from 'src/app/models/app-routes';
 import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ShoppingListFormFields } from './models/shopping-list-form-fields';
+import { Observable } from 'rxjs-compat';
 
 @Component({
   selector: 'app-shopping-list',
@@ -53,13 +54,25 @@ export class ShoppingListPage implements OnInit, OnDestroy {
     this.formGroup.controls[ShoppingListFormFields.Name].setValue(this.shoppingList.name);
     this.formGroup.controls[ShoppingListFormFields.Items].setValue(this.shoppingList.items);
 
-    this.formGroup.valueChanges.pipe(
-      tap(() => this.formUpdated()),
+    this.formGroup.controls[ShoppingListFormFields.Name].valueChanges.pipe(
+      switchMap(() => this.updateShoppingList()),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
-  private formUpdated(): void {
-    console.log(this.formGroup.getRawValue());
+  private updateShoppingList(): Observable<void> {
+    const updatedList = this.getUpdatedShoppingList();
+    return this.shoppingListService.updateShoppingList(updatedList).pipe(
+      tap(() => this.shoppingList = updatedList),
+      map(() => null)
+    );
+  }
+
+  private getUpdatedShoppingList(): ShoppingList {
+    return {
+      ... this.shoppingList,
+      name: this.formGroup.controls[ShoppingListFormFields.Name].value,
+      items: this.formGroup.controls[ShoppingListFormFields.Items].value,
+    }
   }
 }

@@ -34,6 +34,11 @@ describe('ActionsComponent', () => {
     expect(component.declineIcon).toEqual('close');
   });
 
+  it('should init acceptLast', () => {
+    // Assert
+    expect(component.acceptLast).toBeTruthy();
+  });
+
   describe('accept', () => {
     it('should emit acceptEvent when called', () => {
       // Arrange

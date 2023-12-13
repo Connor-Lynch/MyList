@@ -1,8 +1,13 @@
 <div class="flex justify-content-between align-content-center">
+  <ng-container [ngTemplateOutlet]="acceptTemplate" *ngIf="!acceptLast"></ng-container>
   <button mat-icon-button color="warn" (click)="decline()" id="decline-button">
     <mat-icon>{{ declineIcon }}</mat-icon>
   </button>
+  <ng-container [ngTemplateOutlet]="acceptTemplate" *ngIf="acceptLast"></ng-container>
+</div>
+
+<ng-template #acceptTemplate>
   <button mat-icon-button color="primary" (click)="accept()" id="accept-button">
     <mat-icon>{{ acceptIcon }}</mat-icon>
   </button>
-</div>
+</ng-template>

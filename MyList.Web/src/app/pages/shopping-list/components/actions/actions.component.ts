@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ActionsComponent {
   @Input() acceptIcon: string = 'check';
   @Input() declineIcon: string = 'close';
+  @Input() acceptLast: boolean = true;
 
   @Output() acceptEvent = new EventEmitter<void>();
   @Output() declineEvent = new EventEmitter<void>();

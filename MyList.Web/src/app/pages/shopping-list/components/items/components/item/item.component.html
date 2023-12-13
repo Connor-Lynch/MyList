@@ -1,0 +1,37 @@
+<form class="w-full h-4rem grid grid-nogutter flex align-items-center" [formGroup]="formGroup">
+  <mat-checkbox
+    class="col-1"
+    [formControlName]="formFields.IsChecked"
+  ></mat-checkbox>
+  <ng-container [ngTemplateOutlet]="view" *ngIf="!isUnderEdit()"></ng-container>
+  <ng-container [ngTemplateOutlet]="edit" *ngIf="isUnderEdit()"></ng-container>
+</form>
+
+<ng-template #view>
+  <p class="m-0 pl-1 col-8"
+    [class.line-through]="formGroup.controls[formFields.IsChecked].value"
+    (click)="selectItem()"
+  >{{formGroup.controls[formFields.Name].value}}</p>
+  <app-actions
+    *ngIf="isSelected()"
+    class="col-3"
+    acceptIcon="edit"
+    declineIcon="delete_outline"
+    [acceptLast]="false"
+    (acceptEvent)="editItem()"
+    (declineEvent)="deleteItem()"
+  ></app-actions>
+</ng-template>
+
+<ng-template #edit>
+  <form [formGroup]="formGroup" (ngSubmit)="acceptEdit()" class="m-0 pl-1 col-8">
+    <mat-form-field class="form-field w-full">
+      <input matInput type="text" [formControlName]="formFields.Name">
+    </mat-form-field>
+  </form>
+  <app-actions
+    class="col-3"
+    (acceptEvent)="acceptEdit()"
+    (declineEvent)="cancelEdit()"
+  ></app-actions>
+</ng-template>

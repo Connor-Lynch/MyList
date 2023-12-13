@@ -1,16 +1,13 @@
 import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 
 import { ShoppingListPage } from './shopping-list.page';
-import { ListNameComponent } from './components/list-name/list-name.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
 import { ShoppingListItemBuilder } from 'src/app/test/builders/shopping-list-item.builder';
 import { of } from 'rxjs';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { BackButtonStubComponent } from 'src/app/test/stubs/components';
+import { BackButtonStubComponent, ItemsStubComponent, ListNameStubComponent } from 'src/app/test/stubs/components';
 import { ShoppingListFormFields } from './models/shopping-list-form-fields';
 
 describe('ShoppingListComponent', () => {
@@ -32,16 +29,14 @@ describe('ShoppingListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ShoppingListPage, ListNameComponent, BackButtonStubComponent ],
+      declarations: [ ShoppingListPage, ListNameStubComponent, BackButtonStubComponent, ItemsStubComponent ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
-        MatIconModule,
-        MatDividerModule,
       ],
       providers: [
         { provide: ActivatedRoute, useValue: mockActiveRoute },
-        { provide: ShoppingListService, useValue: jasmine.createSpyObj<ShoppingListService>('ShoppingListService', ['getShoppingListById']) },
+        { provide: ShoppingListService, useValue: jasmine.createSpyObj<ShoppingListService>('ShoppingListService', ['getShoppingListById', 'updateShoppingList']) },
       ]
     })
     .compileComponents();
@@ -91,5 +86,53 @@ describe('ShoppingListComponent', () => {
       expect(component.formGroup.controls[ShoppingListFormFields.Name].value).toEqual(mockShoppingList.name);
       expect(component.formGroup.controls[ShoppingListFormFields.Items].value).toEqual(mockShoppingList.items);
     }));
+  });
+
+  describe('list name changed', () => {
+    beforeEach(() => {
+      shoppingListServiceSpy.updateShoppingList.and.returnValue(of(mockShoppingList));
+    });
+
+    it('should update shopping list when the name is updated', fakeAsync(() => {
+      // Arrange
+      const updatedName = 'new name';
+
+      // Act
+      component.formGroup.controls[ShoppingListFormFields.Name].setValue(updatedName);
+      flush();
+
+      // Assert
+      const expectedRequest = {
+        ...component.shoppingList,
+        name: updatedName
+      };
+      expect(shoppingListServiceSpy.updateShoppingList).toHaveBeenCalledWith(expectedRequest);
+    }));
+  });
+
+  describe('template', () => {
+    it('should render back button', () => {
+      // Act
+      const backButton = fixture.debugElement.nativeElement.querySelector('app-back-button');
+
+      // Assert
+      expect(backButton).toBeTruthy();
+    });
+
+    it('should render list name', () => {
+      // Act
+      const listName = fixture.debugElement.nativeElement.querySelector('app-list-name');
+
+      // Assert
+      expect(listName).toBeTruthy();
+    });
+
+    it('should render items', () => {
+      // Act
+      const items = fixture.debugElement.nativeElement.querySelector('app-items');
+
+      // Assert
+      expect(items).toBeTruthy();
+    });
   });
 });
