@@ -25,7 +25,7 @@ describe('ItemComponent', () => {
         ReactiveFormsModule,
       ],
       providers: [
-        { provide: ShoppingListItemService, useValue: jasmine.createSpyObj<ShoppingListItemService>('ShoppingListItemService', ['updateShoppingListItem']) },
+        { provide: ShoppingListItemService, useValue: jasmine.createSpyObj<ShoppingListItemService>('ShoppingListItemService', ['updateShoppingListItem', 'removeShoppingListItem']) },
       ],
     })
     .compileComponents();
@@ -379,8 +379,17 @@ describe('ItemComponent', () => {
     beforeEach(() => {
       onChangeSpy = jasmine.createSpy()
       component.writeValue(mockItem);
-      shoppingListItemServiceSpy.updateShoppingListItem.and.returnValue(of(ShoppingListBuilder.create().build()));
+      shoppingListItemServiceSpy.removeShoppingListItem.and.returnValue(of(ShoppingListBuilder.create().build()));
     });
+
+    it('should call remove on shopping list item service', fakeAsync(() => {
+      // Act
+      component.deleteItem();
+      flush();
+
+      // Assert
+      expect(shoppingListItemServiceSpy.removeShoppingListItem).toHaveBeenCalledWith(mockItem.id);
+    }));
 
     it('should call on change with null', fakeAsync(() => {
       // Arrange

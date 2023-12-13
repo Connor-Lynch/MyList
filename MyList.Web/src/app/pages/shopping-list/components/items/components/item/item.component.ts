@@ -76,13 +76,11 @@ export class ItemComponent implements OnInit, OnDestroy, ControlValueAccessor {
   }
 
   public deleteItem(): void {
-    // this.shoppingListItemService.removeShoppingListItem(this.pristineValue.id)
-    //   .pipe(
-    //     tap(() => this.onChange(null)),
-    //     takeUntil(this.destroy$)
-    //   )
-    //   .subscribe();
-    this.onChange(null);
+    this.shoppingListItemService.removeShoppingListItem(this.pristineValue.id)
+      .pipe(
+        tap(() => this.onChange(null)),
+        takeUntil(this.destroy$)
+      ).subscribe();
   }
 
   public writeValue(value: ShoppingListItem): void {
