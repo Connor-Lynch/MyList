@@ -17,8 +17,8 @@ describe('ListOverviewComponent', () => {
     ShoppingListItemBuilder.create().build()
   ];
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ ListOverviewComponent ],
       imports: [ MatIconModule ]
     })
@@ -36,27 +36,35 @@ describe('ListOverviewComponent', () => {
   });
 
   it('should create', () => {
+    // Assert
     expect(component).toBeTruthy();
   });
 
   it('should show an overview of items', () => {
+    // Act
     const listOverview = de.query(By.css('.list-overview'));
 
+    // Assert
     expect(listOverview).toBeTruthy();
   });
 
   it('should show an a overview of hidden items', () => {
+    // Act
     const hiddenItems = de.query(By.css('.hidden-items'));
 
+    // Assert
     expect(hiddenItems).toBeTruthy();
   });
 
   it('should not show overview of hidden items if there are three or less items', () => {
+    // Arrange
     component.items = [ShoppingListItemBuilder.create().build()];
     fixture.detectChanges();
 
+    // Act
     const hiddenItems = de.query(By.css('.hidden-items'));
 
+    // Assert
     expect(hiddenItems).toBeFalsy();
   });
 

@@ -111,3 +111,11 @@ export class AddListDialogStubComponent {
 })
 export class ConfirmationDialogStubComponent {
 }
+
+@Component({
+  selector: 'app-list-overview',
+  template: '',
+})
+export class ListOverviewStubComponent {
+  @Input() items: any[];
+}

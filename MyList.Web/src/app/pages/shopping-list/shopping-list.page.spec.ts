@@ -53,6 +53,7 @@ describe('ShoppingListComponent', () => {
   });
 
   it('should create', () => {
+    // Assert
     expect(component).toBeTruthy();
   });
 

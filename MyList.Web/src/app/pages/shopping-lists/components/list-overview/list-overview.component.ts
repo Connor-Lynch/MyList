@@ -7,8 +7,5 @@ import { ShoppingListItem } from 'src/app/models/shopping-list-item';
   styleUrls: ['./list-overview.component.scss']
 })
 export class ListOverviewComponent {
-
-  @Input() items: ShoppingListItem[]
-
-  constructor() { }
+  @Input() items: ShoppingListItem[];
 }

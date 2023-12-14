@@ -15,7 +15,7 @@ import { AppRoutes } from 'src/app/models/app-routes';
   styleUrls: ['./shopping-lists.page.scss']
 })
 export class ShoppingListsPage implements OnInit {
-  shoppingLists$: Observable<ShoppingList[]>;
+  public shoppingLists$: Observable<ShoppingList[]>;
   public readonly appRoutes = AppRoutes;
 
   constructor(
@@ -24,7 +24,7 @@ export class ShoppingListsPage implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-      this.shoppingLists$ = this.shoppingListService.getAllShoppingLists();
+    this.shoppingLists$ = this.shoppingListService.getAllShoppingLists();
   }
 
   public toggleListAdd(): void {

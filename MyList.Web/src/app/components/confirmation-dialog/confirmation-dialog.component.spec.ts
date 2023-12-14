@@ -23,8 +23,8 @@ describe('ConfirmationDialogComponent', () => {
     negativeButtonColor: 'primary'
   } as ConfirmationDialogData
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [
         MatButtonModule,
         MatDialogModule

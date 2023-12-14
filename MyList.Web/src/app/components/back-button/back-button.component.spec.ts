@@ -10,8 +10,8 @@ describe('BackButtonComponent', () => {
   let fixture: ComponentFixture<BackButtonComponent>;
   let de: DebugElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ BackButtonComponent ],
       imports: [
         MatIconModule,
@@ -29,21 +29,27 @@ describe('BackButtonComponent', () => {
   });
 
   it('should create', () => {
+    // Assert
     expect(component).toBeTruthy();
   });
 
   it('should have a back button', () => {
+    // Act
     const backButton = de.query(By.css('#back-button'));
 
+    // Assert
     expect(backButton).toBeTruthy();
   });
 
   it('should navigate back on button click', () => {
+    // Arrange
     const backButton = de.query(By.css('#back-button'));
     const locationSpy = spyOn(component.location, 'back');
 
+    // Act
     backButton.triggerEventHandler('click', {});
 
+    // Assert
     expect(locationSpy).toHaveBeenCalled();
   });
 });

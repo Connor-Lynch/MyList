@@ -29,7 +29,7 @@ export class ShoppingListService {
     );
   }
 
-  public getShoppingListById(id: string) {
+  public getShoppingListById(id: string): Observable<ShoppingList> {
     if (!this.shoppingListsIsEmpty && this.containsShoppingList(id)) {
       return of(this.shoppingLists.getValue().find(l => l.id === id));
     }
