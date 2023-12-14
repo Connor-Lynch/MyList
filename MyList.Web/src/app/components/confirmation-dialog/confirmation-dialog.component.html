@@ -1,17 +1,21 @@
-<div class="message">
-  <h1>{{ data.message }}</h1>
+<div class="container p-3">
+  <div class="flex justify-content-center" id="message">
+    <h1>{{ data.message }}</h1>
+  </div>
+  <div class="flex justify-content-between">
+    <button id="negative-button"
+      class="w-6 mr-1"
+      mat-button
+      [color]="data.negativeButtonColor"
+      [mat-dialog-close]>
+      {{ data.negativeButtonText }}
+    </button>
+    <button id="affirmative-button"
+      class="w-6 ml-1"
+      mat-raised-button
+      [color]="data.affirmativeButtonColor"
+      [mat-dialog-close]="true">
+      {{ data.affirmativeButtonText }}
+    </button>
 </div>
-<div class="actions">
-  <button id="negative-button"
-    mat-button
-    [color]="data.negativeButtonColor"
-    [mat-dialog-close]>
-    {{ data.negativeButtonText }}
-  </button>
-  <button id="affirmative-button"
-    mat-raised-button
-    [color]="data.affirmativeButtonColor"
-    [mat-dialog-close]="true">
-    {{ data.affirmativeButtonText }}
-  </button>
 </div>

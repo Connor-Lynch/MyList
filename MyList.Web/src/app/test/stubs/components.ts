@@ -104,3 +104,10 @@ export class EditItemStubComponent {
 })
 export class AddListDialogStubComponent {
 }
+
+@Component({
+  selector: 'app-confirmation-dialog',
+  template: '',
+})
+export class ConfirmationDialogStubComponent {
+}
