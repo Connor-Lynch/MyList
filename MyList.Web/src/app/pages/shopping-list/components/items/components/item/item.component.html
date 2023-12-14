@@ -9,21 +9,22 @@
 </form>
 
 <ng-template #view>
-  <p class="m-0 pl-1 col-8"
-    id="view-item-name"
-    [class.line-through]="formGroup.controls[formFields.IsChecked].value"
-    (click)="selectItem()"
-  >{{formGroup.controls[formFields.Name].value}}</p>
-  <app-actions
-    id="select-actions"
-    *ngIf="isSelected()"
-    class="col-3"
-    acceptIcon="edit"
-    declineIcon="delete_outline"
-    [acceptLast]="false"
-    (acceptEvent)="editItem()"
-    (declineEvent)="deleteItem()"
-  ></app-actions>
+  <div class="col-11 flex align-items-center">
+    <p class="m-0 pl-1 w-full"
+      id="view-item-name"
+      [class.line-through]="formGroup.controls[formFields.IsChecked].value"
+      (click)="selectItem()"
+    >{{formGroup.controls[formFields.Name].value}}</p>
+    <app-actions
+      id="select-actions"
+      *ngIf="isSelected()"
+      acceptIcon="edit"
+      declineIcon="delete_outline"
+      [acceptLast]="false"
+      (acceptEvent)="editItem()"
+      (declineEvent)="deleteItem()"
+    ></app-actions>
+  </div>
 </ng-template>
 
 <ng-template #edit>

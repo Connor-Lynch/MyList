@@ -20,19 +20,18 @@ export class ShoppingListsPage implements OnInit {
 
   constructor(
     public shoppingListService: ShoppingListService,
-    public dialog: MatDialog
-    ) {
-    this.shoppingLists$ = shoppingListService.getAllShoppingLists();
+    public dialog: MatDialog,
+  ) {}
+
+  public ngOnInit(): void {
+      this.shoppingLists$ = this.shoppingListService.getAllShoppingLists();
   }
 
-  ngOnInit(): void {
-  }
-
-  toggleListAdd() {
+  public toggleListAdd(): void {
     this.dialog.open(AddListDialogComponent);
   }
 
-  deleteShoppingList(id: string) {
+  public deleteShoppingList(id: string): void {
     this.shoppingLists$.subscribe((list) => {
       const selectedShoppingList = list.find(l => l.id === id);
 
