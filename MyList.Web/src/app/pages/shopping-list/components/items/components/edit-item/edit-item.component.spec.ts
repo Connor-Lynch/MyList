@@ -44,6 +44,17 @@ describe('EditItemComponent', () => {
       // Assert
       expect(component.formGroup.controls[component.controlName]).toBeTruthy();
     });
+
+    it('should init form group with inputText', () => {
+      // Arrange
+      component.inputText = 'input text';
+
+      // Act
+      component.ngOnInit();
+
+      // Assert
+      expect(component.formGroup.controls[component.controlName].value).toEqual(component.inputText);
+    });
   });
 
   describe('accept', () => {

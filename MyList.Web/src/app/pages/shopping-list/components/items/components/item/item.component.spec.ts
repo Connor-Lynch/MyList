@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 
 import { ItemComponent } from './item.component';
-import { ActionsStubComponent } from 'src/app/test/stubs/components';
+import { ActionsStubComponent, EditItemStubComponent } from 'src/app/test/stubs/components';
 import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
 import { ListState } from '../../services/list-state.service';
 import { ItemFormFields } from './models/item-form-fields';
@@ -22,7 +22,7 @@ describe('ItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ItemComponent, ActionsStubComponent ],
+      declarations: [ ItemComponent, ActionsStubComponent, EditItemStubComponent ],
       imports: [
         MatCheckboxModule,
         MatFormFieldModule,
@@ -268,7 +268,7 @@ describe('ItemComponent', () => {
 
     it('should call service to update item', fakeAsync(() => {
       // Act
-      component.acceptEdit();
+      component.acceptEdit('new item');
       flush();
 
       // Assert
@@ -280,7 +280,7 @@ describe('ItemComponent', () => {
       component.registerOnChange(onChangeSpy);
 
       // Act
-      component.acceptEdit();
+      component.acceptEdit('new item');
       flush();
 
       // Assert
@@ -536,20 +536,12 @@ describe('ItemComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should render form field', () => {
+      it('should render edit item', () => {
         // Act
-        const editItem = fixture.debugElement.query(By.css('#edit-name'));
+        const editItem = fixture.debugElement.nativeElement.querySelector('app-edit-item');
 
         // Assert
         expect(editItem).toBeTruthy();
-      });
-
-      it('should render edit actions', () => {
-        // Act
-        const actions = fixture.debugElement.query(By.css('#edit-actions'));
-
-        // Assert
-        expect(actions).toBeTruthy();
       });
     });
   });

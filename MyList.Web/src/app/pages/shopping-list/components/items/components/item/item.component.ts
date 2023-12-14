@@ -57,13 +57,13 @@ export class ItemComponent implements OnInit, OnDestroy, ControlValueAccessor {
     this.listStateChange.emit(this.listState);
   }
 
-  public acceptEdit() {
+  public acceptEdit(updatedName: string) {
     this.editItem();
     this.selectItem();
 
     const updatedItem: ShoppingListItem = {
       ... this.pristineValue,
-      name: this.formGroup.controls[ItemFormFields.Name].value,
+      name: updatedName,
     };
 
     this.updateItem(updatedItem);

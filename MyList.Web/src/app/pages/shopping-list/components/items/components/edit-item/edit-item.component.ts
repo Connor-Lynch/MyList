@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./edit-item.component.scss']
 })
 export class EditItemComponent implements OnInit {
+  @Input() inputText: string;
   @Output() acceptEvent = new EventEmitter<string>();
   @Output() declineEvent = new EventEmitter<void>();
 
@@ -17,7 +18,7 @@ export class EditItemComponent implements OnInit {
 
   public ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      [this.controlName]: []
+      [this.controlName]: [this.inputText]
     });
   }
 

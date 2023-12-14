@@ -93,6 +93,7 @@ export class AddItemStubComponent {
   template: '',
 })
 export class EditItemStubComponent {
+  @Input() inputText: string;
   @Output() acceptEvent = new EventEmitter<string>();
   @Output() declineEvent = new EventEmitter<void>();
 }

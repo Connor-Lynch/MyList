@@ -27,15 +27,10 @@
 </ng-template>
 
 <ng-template #edit>
-  <form [formGroup]="formGroup" (ngSubmit)="acceptEdit()" class="m-0 pl-1 col-8">
-    <mat-form-field class="w-full" id="edit-name">
-      <input matInput type="text" [formControlName]="formFields.Name">
-    </mat-form-field>
-  </form>
-  <app-actions
-    class="col-3"
-    id="edit-actions"
-    (acceptEvent)="acceptEdit()"
+  <app-edit-item
+    class="col-11"
+    [inputText]="formGroup.controls[formFields.Name].value"
+    (acceptEvent)="acceptEdit($event)"
     (declineEvent)="cancelEdit()"
-  ></app-actions>
+  ></app-edit-item>
 </ng-template>
