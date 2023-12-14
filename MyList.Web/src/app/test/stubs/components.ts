@@ -85,4 +85,14 @@ export class ItemStubComponent implements ControlValueAccessor {
 export class AddItemStubComponent {
   @Input() listState: any;
   @Output() listStateChange = new EventEmitter<any>();
+  @Output() addItemEvent = new EventEmitter<string>();
+}
+
+@Component({
+  selector: 'app-edit-item',
+  template: '',
+})
+export class EditItemStubComponent {
+  @Output() acceptEvent = new EventEmitter<string>();
+  @Output() declineEvent = new EventEmitter<void>();
 }

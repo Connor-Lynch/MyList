@@ -1,8 +1,21 @@
+<div class="w-full h-4rem grid grid-nogutter flex align-items-center" *ngIf="listState?.addInProgress">
+  <mat-checkbox
+    id="checkbox"
+    class="col-1"
+    [disabled]="true"
+  ></mat-checkbox>
+  <app-edit-item
+    class="col-11"
+    (acceptEvent)="addItem($event)"
+    (declineEvent)="cancel()"
+  ></app-edit-item>
+</div>
+
 <div class="flex justify-content-center">
   <button mat-button
     id="add-button"
     [disabled]="!!listState?.itemUnderEditId || listState?.addInProgress"
-    (click)="addNewItem()"
+    (click)="toggleAddNewItem()"
   >
     <mat-icon>add</mat-icon>
     Add Item

@@ -6,5 +6,7 @@
   ></app-item>
 </div>
 <app-add-item
+  class="w-full"
   [(listState)]="listState"
+  (addItemEvent)="addItem($event)"
 ></app-add-item>

@@ -1,0 +1,13 @@
+<div class="w-full h-4rem grid grid-nogutter flex align-items-center">
+  <form [formGroup]="formGroup" (ngSubmit)="accept()" class="m-0 pl-1 col-9">
+    <mat-form-field class="w-full" id="edit-name">
+      <input matInput type="text" [formControlName]="controlName">
+    </mat-form-field>
+  </form>
+  <app-actions
+    class="col-3"
+    id="edit-actions"
+    (acceptEvent)="accept()"
+    (declineEvent)="cancel()"
+  ></app-actions>
+</div>

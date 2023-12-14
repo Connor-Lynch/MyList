@@ -1,19 +1,42 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 
 import { ItemsComponent } from './items.component';
-import { ItemStubComponent } from 'src/app/test/stubs/components';
+import { AddItemStubComponent, ItemStubComponent } from 'src/app/test/stubs/components';
 import { ShoppingListItemBuilder } from 'src/app/test/builders/shopping-list-item.builder';
+import { ShoppingListItemService } from 'src/app/services/shopping-list-item.service';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
+import { of } from 'rxjs';
+import { ShoppingListItem } from 'src/app/models/shopping-list-item';
 
 describe('ItemsComponent', () => {
   let component: ItemsComponent;
   let fixture: ComponentFixture<ItemsComponent>;
+  let shoppingListItemServiceSpy: jasmine.SpyObj<ShoppingListItemService>;
+
+  const shoppingListId = '1';
+  const mockActiveRoute = {
+    snapshot: {
+      paramMap: convertToParamMap({
+        shoppingListId: shoppingListId
+      })
+    }
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ItemsComponent, ItemStubComponent ]
+      declarations: [ ItemsComponent, ItemStubComponent, AddItemStubComponent ],
+      providers: [
+        { provide: ActivatedRoute, useValue: mockActiveRoute },
+        { provide: ShoppingListItemService, useValue: jasmine.createSpyObj<ShoppingListItemService>('ShoppingListItemService', ['addShoppingListItem']) },
+      ],
     })
     .compileComponents();
 
+    shoppingListItemServiceSpy = TestBed.inject(ShoppingListItemService) as jasmine.SpyObj<ShoppingListItemService>;
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(ItemsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -109,6 +132,69 @@ describe('ItemsComponent', () => {
 
       // Assert
       expect(onChangeSpy).toHaveBeenCalledWith([newValue[0]]);
+    });
+  });
+
+  describe('addNewItem', () => {
+    let onChangeSpy: jasmine.Spy;
+    const mockShoppingList = ShoppingListBuilder.create()
+      .withItems([
+        ShoppingListItemBuilder.create().build(),
+        ShoppingListItemBuilder.create().build()
+      ]).build();
+
+    beforeEach(() => {
+      onChangeSpy = jasmine.createSpy();
+      shoppingListItemServiceSpy.addShoppingListItem.and.returnValue(of(mockShoppingList));
+    });
+
+    it('should call service to add new item', fakeAsync(() => {
+      // Arrange
+      const newItemName = 'new name';
+
+      // Act
+      component.addItem(newItemName);
+      flush();
+
+      // Assert
+      const expectedRequest: ShoppingListItem = {
+        name: newItemName,
+        id: null,
+        shoppingListId: shoppingListId,
+        isChecked: false,
+        sortOrder: null,
+      };
+      expect(shoppingListItemServiceSpy.addShoppingListItem).toHaveBeenCalledWith(expectedRequest);
+    }));
+
+    it('should update itemsControls with new items', fakeAsync(() => {
+      // Act
+      component.addItem('new name');
+      flush();
+
+      // Assert
+      expect(component.itemsControl.value).toEqual(mockShoppingList.items);
+    }));
+
+    it('should emit control value', fakeAsync(() => {
+      // Arrange
+      component.registerOnChange(onChangeSpy);
+
+      // Act
+      component.addItem('new item');
+
+      // Assert
+      expect(onChangeSpy).toHaveBeenCalledWith(mockShoppingList.items);
+    }));
+  });
+
+  describe('template', () => {
+    it('should render addItem component', () => {
+      // Act
+      const addItem = fixture.debugElement.nativeElement.querySelector('app-add-item');
+
+      // Assert
+      expect(addItem).toBeTruthy();
     });
   });
 });
