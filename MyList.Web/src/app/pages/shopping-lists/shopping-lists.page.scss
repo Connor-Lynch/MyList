@@ -2,17 +2,19 @@
   .card {
     width: 45%;
     height: 20%;
+    margin: 1rem;
   }
 
   @media only screen and (max-width: 600px) {
     .card {
       width: 100%;
       overflow: hidden;
+      margin: .25rem;
     }
   }
 }
 
 .add-fab {
-  bottom:5%;
-  right:5%;
+  bottom: 2%;
+  right: 2%;
 }

@@ -1,5 +1,5 @@
-<div class="card-list-container flex justify-content-between flex-wrap overflow-y-auto mx-5">
-  <mat-card *ngFor="let shoppingList of shoppingLists$ | async" class="card m-3 cursor-pointer" id="view-button">
+<div class="card-list-container flex justify-content-between flex-wrap overflow-y-auto mx-5 px-3">
+  <mat-card *ngFor="let shoppingList of shoppingLists$ | async" class="card cursor-pointer" id="view-button">
     <div id="card-body" [routerLink]="['/' + appRoutes.shoppingList.route, shoppingList.id]">
       <mat-card-title class="p-3">
         {{ shoppingList.name }}

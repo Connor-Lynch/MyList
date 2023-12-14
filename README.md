@@ -2,14 +2,14 @@
 MyList is a simple web application that gives users the ability to keep track of multiple shopping list. User have the ability to create new shopping lists or simple manage and view existing lists.
 
 ## Browser
+![Shopping Lists](./assets/UI.gif)
+
 ![Shopping Lists](./assets/shoppingLists.png)
 
 ![Shopping Lists](./assets/shoppingList.png)
 
 ## Mobile
-![Shopping Lists](./assets/shoppingLists_mobile.png)
-
-![Shopping Lists](./assets/shoppingList_mobile.png)
+![Shopping Lists](./assets/shoppingLists_mobile.png) | ![Shopping Lists](./assets/shoppingList_mobile.png)
 # FrontEnd
 
 The front end for this project is written in `Angular` and uses `Angular Material` for its bootstrap. `NgTest` is used for testing all of the front end components.
