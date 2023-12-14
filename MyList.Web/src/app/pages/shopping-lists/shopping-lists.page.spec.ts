@@ -16,7 +16,7 @@ import { AppRoutes } from 'src/app/models/app-routes';
 import { AddListDialogStubComponent, ListOverviewStubComponent } from 'src/app/test/stubs/components';
 import { MatDividerModule } from '@angular/material/divider';
 
-fdescribe('ShoppingListsPage', () => {
+describe('ShoppingListsPage', () => {
   let component: ShoppingListsPage;
   let fixture: ComponentFixture<ShoppingListsPage>;
   let de: DebugElement;
@@ -91,6 +91,67 @@ fdescribe('ShoppingListsPage', () => {
     });
   });
 
+  describe('deleteShoppingLists', () => {
+    beforeEach(() => {
+      shoppingListServiceSpy.removeShoppingList.calls.reset();
+      shoppingListServiceSpy.getAllShoppingLists.calls.reset();
+    });
+
+    it('should open dialog component', () => {
+      // Arrange
+      const openSpy = spyOn(component.dialog, 'open');
+
+      // Act
+      component.deleteShoppingList(mockShoppingList);
+
+      // Assert
+      expect(openSpy).toHaveBeenCalled();
+    });
+
+    it('should call service remove shopping list when dialog accepts an affirmative action', fakeAsync(() => {
+      // Arrange
+      spyOn(component.dialog, 'open').and.returnValue(
+        {afterClosed: () => of(true)} as MatDialogRef<ConfirmationDialogComponent>
+      );
+
+      // Act
+      component.deleteShoppingList(mockShoppingList);
+      flush();
+
+      // Assert
+      expect(shoppingListServiceSpy.removeShoppingList).toHaveBeenCalledWith(mockShoppingList.id);
+    }));
+
+    it('should call service to get shopping lists after shopping list is removed', fakeAsync(() => {
+      // Arrange
+      spyOn(component.dialog, 'open').and.returnValue(
+        {afterClosed: () => of(true)} as MatDialogRef<ConfirmationDialogComponent>
+      );
+
+      // Act
+      component.deleteShoppingList(mockShoppingList);
+      flush();
+
+      // Assert
+      expect(shoppingListServiceSpy.getAllShoppingLists).toHaveBeenCalled();
+    }));
+
+    it('should not call any service when dialog accepts a negative action', fakeAsync(() => {
+      // Arrange
+      spyOn(component.dialog, 'open').and.returnValue(
+        {afterClosed: () => of(false)} as MatDialogRef<ConfirmationDialogComponent>
+      );
+
+      // Act
+      component.deleteShoppingList(mockShoppingList);
+      flush();
+
+      // Assert
+      expect(shoppingListServiceSpy.removeShoppingList).not.toHaveBeenCalled();
+      expect(shoppingListServiceSpy.getAllShoppingLists).not.toHaveBeenCalled();
+    }));
+  });
+
   describe('template', () => {
     it('should have a card for shopping list', () => {
       // Act
@@ -135,34 +196,6 @@ fdescribe('ShoppingListsPage', () => {
       // Assert
       expect(deleteShoppingListSpy).toHaveBeenCalled();
     });
-
-    // it('should call service when delete is clicked and dialog passes affirmative result', () => {
-    //   // Arrange
-    //   const deleteButton = de.query(By.css('#delete-button'));
-    //   spyOn(component.dialog, 'open').and.returnValue(
-    //     {afterClosed: () => of(true)} as MatDialogRef<ConfirmationDialogComponent>
-    //   );
-
-    //   // Act
-    //   deleteButton.triggerEventHandler('click', {});
-
-    //   // Assert
-    //   expect(shoppingListServiceSpy.removeShoppingList).toHaveBeenCalledWith('1');
-    // });
-
-    // it('should not call service when delete is clicked and dialog passes negative result', () => {
-    //   // Arrange
-    //   const deleteButton = de.query(By.css('#delete-button'));
-    //   spyOn(component.dialog, 'open').and.returnValue(
-    //     {afterClosed: () => of(false)} as MatDialogRef<ConfirmationDialogComponent>
-    //   );
-
-    //   // Act
-    //   deleteButton.triggerEventHandler('click', {});
-
-    //   // Assert
-    //   expect(shoppingListServiceSpy.removeShoppingList).not.toHaveBeenCalled();
-    // });
 
     it('should route to list details on card click', fakeAsync(() => {
       // Arrange
