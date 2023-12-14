@@ -77,3 +77,12 @@ export class ItemStubComponent implements ControlValueAccessor {
   registerOnTouched(fn: any): void {}
   setDisabledState?(isDisabled: boolean): void {}
 }
+
+@Component({
+  selector: 'app-add-item',
+  template: '',
+})
+export class AddItemStubComponent {
+  @Input() listState: any;
+  @Output() listStateChange = new EventEmitter<any>();
+}

@@ -45,7 +45,19 @@ describe('ShoppingListService', () => {
       service.trySelectItem(newId);
 
       // Assert
-      expect(service.selectedId).toBeNull();
+      expect(service.selectedId).toBeFalsy();
+    });
+
+    it('should not set selectedItemId when addInProgress is true', () => {
+      // Arrange
+      service.tryAddItem();
+      const newId = 'newId';
+
+      // Act
+      service.trySelectItem(newId);
+
+      // Assert
+      expect(service.selectedId).toBeFalsy();
     });
   });
 
@@ -82,7 +94,62 @@ describe('ShoppingListService', () => {
       service.tryEditItem(newId);
 
       // Assert
-      expect(service.itemUnderEditId).toBeNull();
+      expect(service.itemUnderEditId).toBeFalsy();
+    });
+
+    it('should not set itemUnderEditId when addInProgress is true', () => {
+      // Arrange
+      service.tryAddItem();
+      const newId = 'newId';
+
+      // Act
+      service.tryEditItem(newId);
+
+      // Assert
+      expect(service.itemUnderEditId).toBeFalsy();
+    });
+  });
+
+  describe('tryAddItem', () => {
+    it('should set addInProgress to true', () => {
+      // Act
+      service.tryAddItem();
+
+      // Assert
+      expect(service.addInProgress).toBeTruthy();
+    });
+
+    it('should set addInProgress to false when it is currently true', () => {
+      // Arrange
+      service.tryAddItem();
+
+      // Act
+      service.tryAddItem();
+
+      // Assert
+      expect(service.addInProgress).toBeFalsy();
+    });
+
+    it('should clear selectedId', () => {
+      // Arrange
+      service.trySelectItem('id');
+
+      // Act
+      service.tryAddItem();
+
+      // Assert
+      expect(service.selectedId).toBeFalsy();
+    });
+
+    it('should not set addInProgress when itemUnderEditId is set', () => {
+      // Arrange
+      service.tryEditItem('id');
+
+      // Act
+      service.tryAddItem();
+
+      // Assert
+      expect(service.addInProgress).toBeFalsy();
     });
   });
 });

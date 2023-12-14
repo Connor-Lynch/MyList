@@ -1,0 +1,10 @@
+<div class="flex justify-content-center">
+  <button mat-button
+    id="add-button"
+    [disabled]="!!listState?.itemUnderEditId || listState?.addInProgress"
+    (click)="addNewItem()"
+  >
+    <mat-icon>add</mat-icon>
+    Add Item
+  </button>
+</div>

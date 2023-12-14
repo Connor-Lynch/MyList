@@ -14,6 +14,7 @@ import { ListNameComponent } from './components/list-name/list-name.component';
 import { ActionsComponent } from './components/actions/actions.component';
 import { ItemsComponent } from './components/items/items.component';
 import { ItemComponent } from './components/items/components/item/item.component';
+import { AddItemComponent } from './components/items/components/add-item/add-item.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,6 @@ const routes: Routes = [
     FormsModule,
     BackButtonModule
   ],
-  declarations: [ ShoppingListPage, ListNameComponent, ActionsComponent, ItemsComponent, ItemComponent ]
+  declarations: [ ShoppingListPage, ListNameComponent, ActionsComponent, ItemsComponent, ItemComponent, AddItemComponent ]
 })
 export class ShoppingListPageModule {}
