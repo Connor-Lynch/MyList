@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup, UntypedFormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
+import { AppRoutes } from 'src/app/models/app-routes';
 import { ShoppingList } from 'src/app/models/shopping-list';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 
@@ -11,10 +13,11 @@ import { ShoppingListService } from 'src/app/services/shopping-list.service';
   templateUrl: './add-list-dialog.component.html',
   styleUrls: ['./add-list-dialog.component.scss']
 })
-export class AddListDialogComponent {
-  public addListForm = this.formBuilder.group({
-    listName: ['']
-  });
+export class AddListDialogComponent implements OnInit, OnDestroy {
+  public formGroup: FormGroup;
+
+  public readonly controlName = 'listName';
+  private destroy$ = new Subject<void>();
 
   constructor(
     public shoppingListService: ShoppingListService,
@@ -23,23 +26,47 @@ export class AddListDialogComponent {
     public formBuilder: UntypedFormBuilder
   ) { }
 
-  saveNewList() {
-    const newListName = this.addListForm.get('listName').value;
-    if (newListName) {
-      const newShoppingList = {
-        name: newListName
-      } as ShoppingList;
-
-      this.shoppingListService.addShoppingList(newShoppingList)
-        .pipe(take(1))
-        .subscribe((newList) => {
-          this.router.navigateByUrl(`/shopping-list-detail/${newList.id}`);
-          this.dialogRef.close();
-        });
-    }
+  public ngOnInit(): void {
+    this.formGroup = this.formBuilder.group({
+      [this.controlName]: ['']
+    });
   }
 
-  cancel() {
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  public saveNewList(): void {
+    const newListName = this.formGroup.get(this.controlName).value?.trim();
+
+    if (!newListName) {
+      this.cancel();
+    }
+
+    const newShoppingList: ShoppingList = {
+      name: newListName,
+      id: null,
+      createdDate: null,
+      items: null
+    };
+
+    this.saveNewShoppingList(newShoppingList);
+  }
+
+  public cancel(): void {
     this.dialogRef.close();
+  }
+
+  private saveNewShoppingList(newList: ShoppingList): void {
+    this.shoppingListService.addShoppingList(newList)
+    .pipe(
+      tap((newList) => {
+        this.router.navigateByUrl(`/${AppRoutes.shoppingList.route}/${newList.id}`);
+        this.dialogRef.close();
+      }),
+      takeUntil(this.destroy$),
+    )
+    .subscribe();
   }
 }

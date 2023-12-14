@@ -13,6 +13,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { AppRoutes } from 'src/app/models/app-routes';
+import { AddListDialogStubComponent } from 'src/app/test/stubs/components';
 
 describe('ShoppingListsPage', () => {
   let component: ShoppingListsPage;
@@ -30,7 +31,7 @@ describe('ShoppingListsPage', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [ ShoppingListsPage ],
+      declarations: [ ShoppingListsPage, AddListDialogStubComponent ],
       providers: [
         { provide: ShoppingListService, useValue: jasmine.createSpyObj<ShoppingListService>('ShoppingListService', ['getAllShoppingLists', 'removeShoppingList']) },
         { provide: MatDialog, useValue: mockDialog }

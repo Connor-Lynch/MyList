@@ -22,7 +22,7 @@ describe('EditItemComponent', () => {
         MatInputModule,
         FormsModule,
         ReactiveFormsModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ]
     })
     .compileComponents();

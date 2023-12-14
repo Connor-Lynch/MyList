@@ -1,7 +1,7 @@
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { AddListDialogComponent } from './add-list-dialog.component';
-import { CUSTOM_ELEMENTS_SCHEMA, Type, DebugElement } from '@angular/core';
+import { Type, DebugElement } from '@angular/core';
 import { ShoppingListBuilder } from 'src/app/test/builders/shopping-list.builder';
 import { of } from 'rxjs';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
@@ -10,42 +10,45 @@ import { Location } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { AppRoutes } from 'src/app/models/app-routes';
+import { ShoppingList } from 'src/app/models/shopping-list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AddItemDialogComponent', () => {
   let component: AddListDialogComponent;
   let fixture: ComponentFixture<AddListDialogComponent>;
   let de: DebugElement;
   let location: Location;
-
-  const mockShoppingList = ShoppingListBuilder.create().build();
-  const mockShoppingListService = {
-    addShoppingList() { of(mockShoppingList) },
-  }
+  let shoppingListServiceSpy: jasmine.SpyObj<ShoppingListService>;
 
   const mockDialogRef = {
     close() { }
   }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ AddListDialogComponent ],
       providers: [
-        { provide: ShoppingListService, useValue: mockShoppingListService },
+        { provide: ShoppingListService, useValue: jasmine.createSpyObj<ShoppingListService>('ShoppingListService', ['addShoppingList']) },
         { provide: MatDialogRef, useValue: mockDialogRef }
       ],
       imports: [
         RouterTestingModule.withRoutes([
-          { path: 'shopping-list-detail/1', component: {} as Type<any> }
+          { path: `${AppRoutes.shoppingList.route}/1`, component: {} as Type<any> }
         ]),
+        MatFormFieldModule,
+        MatInputModule,
         MatButtonModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        NoopAnimationsModule,
       ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ]
     })
     .compileComponents();
+
+    shoppingListServiceSpy = TestBed.inject(ShoppingListService) as jasmine.SpyObj<ShoppingListService>;
   });
 
   beforeEach(() => {
@@ -60,72 +63,131 @@ describe('AddItemDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a cancel button', () => {
-    const cancelButton = de.query(By.css('#cancel-button'));
+  describe('ngOnInit', () => {
+    it('should init formGroup', () => {
+      // Act
+      component.ngOnInit();
 
-    expect(cancelButton).toBeTruthy();
+      // Assert
+      expect(component.formGroup).toBeTruthy();
+      expect(component.formGroup.controls[component.controlName]).toBeTruthy();
+    });
   });
 
-  it('should have a save button', () => {
-    const saveButton = de.query(By.css('#save-button'));
+  describe('saveNewList', () => {
+    const mockShoppingList = ShoppingListBuilder.create().build();
 
-    expect(saveButton).toBeTruthy();
+    beforeEach(() => {
+      shoppingListServiceSpy.addShoppingList.and.returnValue(of(mockShoppingList));
+    });
+
+    it('should call service to add new list', fakeAsync(() => {
+      // Arrange
+      const newListName = 'new list name';
+      component.formGroup.controls[component.controlName].setValue(newListName);
+
+      // Act
+      component.saveNewList();
+      flush();
+
+      // Assert
+      const expectedRequest: ShoppingList = {
+        name: newListName,
+        id: null,
+        createdDate: null,
+        items: null
+      };
+      expect(shoppingListServiceSpy.addShoppingList).toHaveBeenCalledWith(expectedRequest);
+    }));
+
+    it('should navigate to new shopping list', fakeAsync(() => {
+      // Arrange
+      const newListName = 'new list name';
+      component.formGroup.controls[component.controlName].setValue(newListName);
+
+      // Act
+      component.saveNewList();
+      flush();
+
+      // Assert
+      expect(location.path()).toBe(`/${AppRoutes.shoppingList.route}/1`);
+    }));
+
+    it('should call cancel if save is called with a null form control value', fakeAsync(() => {
+      // Arrange
+      component.formGroup.controls[component.controlName].setValue(null);
+      const cancelSpy = spyOn(component, 'cancel');
+
+      // Act
+      component.saveNewList();
+      flush();
+
+      // Assert
+      expect(cancelSpy).toHaveBeenCalled();
+    }));
   });
 
-  it('should have a add form', () => {
-    const addForm = de.query(By.css('.add-form'));
+  describe('cancel', () => {
+    it('should call close on dialog ref', () => {
+      // Arrange
+      const closeSpy = spyOn(component.dialogRef, 'close');
 
-    expect(addForm).toBeTruthy();
+      // Act
+      component.cancel();
+
+      // Assert
+      expect(closeSpy).toHaveBeenCalled();
+    });
   });
 
-  it('should call close when cancel is clicked', () => {
-    const cancelButton = de.query(By.css('#cancel-button'));
-    const closeSpy = spyOn(component.dialogRef, 'close');
+  describe('template', () => {
+    it('should have a cancel button', () => {
+      // Act
+      const cancelButton = de.query(By.css('#cancel-button'));
 
-    cancelButton.triggerEventHandler('click', {});
+      // Assert
+      expect(cancelButton).toBeTruthy();
+    });
 
-    expect(closeSpy).toHaveBeenCalled();
-  });
+    it('should have a save button', () => {
+      // Act
+      const saveButton = de.query(By.css('#save-button'));
 
-  it('should not call service when save button is clicked with a null name', () => {
-    const saveButton = de.query(By.css('#save-button'));
-    const serviceSpy = spyOn(component.shoppingListService, 'addShoppingList');
+      // Assert
+      expect(saveButton).toBeTruthy();
+    });
 
-    saveButton.triggerEventHandler('click', {});
+    it('should have an add form', () => {
+      // Act
+      const addForm = de.nativeElement.querySelector('mat-form-field');
 
-    expect(serviceSpy).not.toHaveBeenCalled();
-  });
+      // Assert
+      expect(addForm).toBeTruthy();
+    });
 
-  it('should call service when save button is clicked', () => {
-    component.addListForm.get('listName').setValue('listName');
-    const saveButton = de.query(By.css('#save-button'));
-    const serviceSpy = spyOn(component.shoppingListService, 'addShoppingList');
 
-    saveButton.triggerEventHandler('click', {});
+    it('should call cancel when cancel is clicked', () => {
+      // Arrange
+      const cancelButton = de.query(By.css('#cancel-button'));
+      const cancelSpy = spyOn(component, 'cancel');
 
-    expect(serviceSpy).toHaveBeenCalled();
-  });
+      // Act
+      cancelButton.triggerEventHandler('click', {});
 
-  it('should navigate to list detail page after save', fakeAsync(() => {
-    component.addListForm.get('listName').setValue('listName');
-    const saveButton = de.query(By.css('#save-button'));
-    spyOn(component.shoppingListService, 'addShoppingList').and.returnValue(of(mockShoppingList));
+      // Assert
+      expect(cancelSpy).toHaveBeenCalled();
+    });
 
-    saveButton.triggerEventHandler('click', {});
+    it('should call saveNewList when cancel is clicked', () => {
+      // Arrange
+      const saveButton = de.query(By.css('#save-button'));
+      const saveNewListSpy = spyOn(component, 'saveNewList');
 
-    flush();
+      // Act
+      saveButton.triggerEventHandler('click', {});
 
-    expect(location.path()).toBe('/shopping-list-detail/1');
-  }));
-
-  it('should close dialog after save', () => {
-    component.addListForm.get('listName').setValue('listName');
-    const saveButton = de.query(By.css('#save-button'));
-    spyOn(component.shoppingListService, 'addShoppingList').and.returnValue(of(mockShoppingList));
-    const closeSpy = spyOn(component.dialogRef, 'close');
-
-    saveButton.triggerEventHandler('click', {});
-
-    expect(closeSpy).toHaveBeenCalled();
+      // Assert
+      expect(saveNewListSpy).toHaveBeenCalled();
+    });
   });
 });

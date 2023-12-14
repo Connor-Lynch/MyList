@@ -1,10 +1,10 @@
 <div class="container p-3">
-  <form [formGroup]="addListForm" (ngSubmit)="saveNewList()">
-    <mat-form-field class="add-form">
+  <form [formGroup]="formGroup" (ngSubmit)="saveNewList()">
+    <mat-form-field class="w-full pb-3">
       <mat-label>List Name</mat-label>
       <input matInput placeholder="New List"
         type="text"
-        formControlName="listName">
+        [formControlName]="controlName">
     </mat-form-field>
   </form>
   <div class="flex justify-content-between">
