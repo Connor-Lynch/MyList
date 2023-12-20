@@ -8,12 +8,12 @@ export default async function ShoppingLists() {
 
     return (
         <div>
+            <AddButton />
             <div className="p-5 flex flex-wrap">
                 {shoppingLists.map(list => 
                     <Card shoppingList={list} key={list.id}/> 
-                )}
+                    )}
             </div>
-            <AddButton />
         </div>
     );
 }
