@@ -2,7 +2,7 @@
 
 import { RedirectType, redirect } from "next/navigation";
 import { ShoppingList } from "../models/shopping-list";
-import { addShoppingList, deleteShoppingList } from "../services/shopping-list.service";
+import { addShoppingList, deleteShoppingList, putShoppingList } from "../services/shopping-list.service";
 import { revalidatePath } from "next/cache";
 
 export async function createShoppingList(newListName: string) {
@@ -16,12 +16,18 @@ export async function createShoppingList(newListName: string) {
     const result = await addShoppingList(newShoppingList);
     
     revalidatePath('/shopping-lists');
-    redirect(`/shopping-list/${result.id}`, RedirectType.replace)
+    redirect(`/shopping-list/${result.id}`, RedirectType.replace);
 }
 
 export async function removeShoppingList(shoppingListId: string) {
-    const result = await deleteShoppingList(shoppingListId);
+    await deleteShoppingList(shoppingListId);
     
     revalidatePath('/shopping-lists');
-    // redirect(`/shopping-list/${result.id}`, RedirectType.replace)
+}
+
+export async function updateShoppingList(shoppingList: ShoppingList) {
+    const result = await putShoppingList(shoppingList);
+
+    revalidatePath('/shopping-lists');
+    revalidatePath(`/shopping-list/${result.id}`);
 }

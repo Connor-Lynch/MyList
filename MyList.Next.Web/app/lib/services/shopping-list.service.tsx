@@ -44,6 +44,19 @@ export async function deleteShoppingList(shoppingListId: string): Promise<Shoppi
       .catch(err => handleError(err));
 }
 
+export async function putShoppingList(shoppingList: ShoppingList): Promise<ShoppingList> {
+    let endpoint = `${apiRootUrl}/ShoppingLists/Update`;
+    return fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(shoppingList),
+      })
+      .then(res => res.json())
+      .catch(err => handleError(err));
+}
+
 function handleError(err: Error): void {
     console.log(err);
     throw err;

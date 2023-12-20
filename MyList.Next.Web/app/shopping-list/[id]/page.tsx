@@ -10,7 +10,7 @@ export default async function ShoppingList({ params }: { params: { id: string} }
     return (
         <div className="p-3">
             <BackButton />
-            <div className="p-4">
+            <div className="p-4 w-full">
                 <ListName shoppingList={shoppingList} />
                 <ItemsList shoppingList={shoppingList}/>
             </div>
