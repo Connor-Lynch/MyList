@@ -1,7 +1,8 @@
 import { ShoppingList } from "../../lib/models/shopping-list";
 import { getShoppingListById } from "@/app/lib/services/shopping-list.service";
-
 import BackButton from "@/app/ui/shopping-list/back-button";
+import ListName from "@/app/ui/shopping-list/list-name";
+import ItemsList from "@/app/ui/shopping-list/items-list";
 
 export default async function ShoppingList({ params }: { params: { id: string} }) {
     const shoppingList: ShoppingList = await getShoppingListById(params.id);
@@ -9,14 +10,10 @@ export default async function ShoppingList({ params }: { params: { id: string} }
     return (
         <div className="p-3">
             <BackButton />
-            <div className="p-3">
-                <h1>{ shoppingList.name }</h1>
+            <div className="p-4">
+                <ListName shoppingList={shoppingList} />
+                <ItemsList shoppingList={shoppingList}/>
             </div>
-            <ul>
-                { shoppingList.items.map(item => 
-                    <li key={item.id}>{ item.name }</li>
-                )}
-            </ul>
         </div>
     )
 }
