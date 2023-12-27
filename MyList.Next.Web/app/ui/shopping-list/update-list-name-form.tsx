@@ -1,9 +1,11 @@
+'use client';
+
 import { updateShoppingList } from "@/app/lib/actions/shopping-list.actrion";
 import { ShoppingList } from "@/app/lib/models/shopping-list";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Dispatch, SetStateAction } from "react";
 
-export default async function UpdateListFormName({ shoppingList, closeEvent, editListName }: { shoppingList: ShoppingList, closeEvent: Function, editListName: Dispatch<SetStateAction<string>> }) {
+export default function UpdateListFormName({ shoppingList, closeEvent, editListName }: { shoppingList: ShoppingList, closeEvent: Function, editListName: Dispatch<SetStateAction<string>> }) {
     const inputName = 'list-name';
     function saveForm(formData: FormData) { 
         const newListName = formData.get(inputName)?.toString().trim();

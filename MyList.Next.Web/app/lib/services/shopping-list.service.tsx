@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import { ShoppingList } from "../models/shopping-list";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // ToDo: Revisit This

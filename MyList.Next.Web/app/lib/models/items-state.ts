@@ -1,4 +1,5 @@
 export interface ItemListState {
-    selectedId?: string
+    selectedId?: string,
+    editInProgress?: boolean,
 }
   

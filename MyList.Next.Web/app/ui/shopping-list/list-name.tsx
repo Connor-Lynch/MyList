@@ -22,7 +22,7 @@ export default function ListName({ shoppingList }: { shoppingList: ShoppingList 
                 </div> :
                 <>
                     <h1 className="text-2xl font-bold">{ listName }</h1>
-                    <PencilIcon className="h-6 text-cyan-600" onClick={toggleEdit}/>
+                    <PencilIcon className="h-6 text-cyan-600 cursor-pointer" onClick={toggleEdit}/>
                 </>
             }
         </div>
