@@ -56,7 +56,7 @@ describe('ShoppingListsPage', () => {
   });
 
   beforeEach(() => {
-    location = TestBed.get(Location);
+    location = TestBed.inject(Location);
     fixture = TestBed.createComponent(ShoppingListsPage);
     component = fixture.componentInstance;
     de = fixture.debugElement;

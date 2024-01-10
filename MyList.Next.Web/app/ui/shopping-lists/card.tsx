@@ -15,7 +15,7 @@ export default function Card({ shoppingList } : { shoppingList: ShoppingList }) 
     return (
         <div className="w-full md:w-1/2 relative">
             <Link href={`/shopping-list/${shoppingList.id}`}>
-                <div className="rounded-xl bg-gray-50 p-2 m-3 shadow-sm drop-shadow-md">
+                <div className="rounded-xl bg-gray-50 p-2 m-5 md:m-3 shadow-sm drop-shadow-md">
                     <div className="flex p-4">
                         <h3 className="ml-2 text-l font-xl">{shoppingList.name}</h3>
                     </div>
