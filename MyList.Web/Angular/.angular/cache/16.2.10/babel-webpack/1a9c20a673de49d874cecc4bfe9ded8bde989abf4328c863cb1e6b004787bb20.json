@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var ItemFormFields = /*#__PURE__*/function (ItemFormFields) {\n  ItemFormFields[\"IsChecked\"] = \"isChecked\";\n  ItemFormFields[\"Name\"] = \"name\";\n  return ItemFormFields;\n}(ItemFormFields || {});","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

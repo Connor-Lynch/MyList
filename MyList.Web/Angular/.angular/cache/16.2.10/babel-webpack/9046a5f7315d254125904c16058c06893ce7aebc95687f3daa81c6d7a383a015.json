@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const AppRoutes = {\n  shoppingLists: {\n    route: 'shopping-lists'\n  },\n  shoppingList: {\n    route: 'shopping-list',\n    data: 'shoppingListId'\n  }\n};","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

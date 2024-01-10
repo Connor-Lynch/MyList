@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var ShoppingListFormFields = /*#__PURE__*/function (ShoppingListFormFields) {\n  ShoppingListFormFields[\"Name\"] = \"name\";\n  ShoppingListFormFields[\"Items\"] = \"items\";\n  return ShoppingListFormFields;\n}(ShoppingListFormFields || {});","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

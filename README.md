@@ -1,51 +1,11 @@
 # MyList, A Simple Shopping List Manager
 MyList is a simple web application that gives users the ability to keep track of multiple shopping list. User have the ability to create new shopping lists or simple manage and view existing lists.
 
-## Browser
-![Shopping Lists](./assets/UI.gif)
+# Web
+I build the web UI in both Angular and React(NextJS). You can read more about those in the `Mylist.Web` directory.
 
-![Shopping Lists](./assets/shoppingLists.png)
+[Web](./MyList.Web/README.MD)
 
-![Shopping Lists](./assets/shoppingList.png)
-
-## Mobile
-![Shopping Lists](./assets/shoppingLists_mobile.png) | ![Shopping Lists](./assets/shoppingList_mobile.png)
-# FrontEnd
-
-The front end for this project is written in `Angular` and uses `Angular Material` for its bootstrap. `NgTest` is used for testing all of the front end components.
-```
-[]src
-|
-|--[]app
-|   |-- []components
-|   |    |-- Common components and can be used anywhere in the application
-|   |    `-- []models
-|   |         `-- Interfaces specific to component
-|   |-- []models
-|   |    `-- Interface for data mapping
-|   |-- []pages
-|   |    |-- Web pages that are in the main routing module
-|   |    `-- []components
-|   |         `-- Components that are used only on this page
-|   |-- []services
-|   |    `-- Services that handle external communication
-|   |-- []test
-|        |-- Common code shared for testing
-|        `-- []builders
-|             `-- Builders that dynamically create interfaces for testing
-`-- appSetting.json
-    `-- Environment specific configurations
-```
-
-## Starting the FrontEnd
-
-```cmd
-cd .\MyList.Web
-npm i
-ng serve
-
-http://localhost:4200/shopping-lists
-```
 
 # BackEnd
 
