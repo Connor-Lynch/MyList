@@ -1,9 +1,9 @@
 # MyList Web
 I build the same UI in both Angular and React. You can read more about the particular implementation in their respective folders.
 
-[Angular](./Angular/README.MD)
+[Angular](./Angular/README.md)
 
-[React(Next JS)](./Next.Js/README.MD)
+[React(Next JS)](./Next.Js/README.md)
 
 # UI Screenshots
 

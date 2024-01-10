@@ -4,7 +4,7 @@ MyList is a simple web application that gives users the ability to keep track of
 # Web
 I build the web UI in both Angular and React(NextJS). You can read more about those in the `Mylist.Web` directory.
 
-[Web](./MyList.Web/README.MD)
+[Web](./MyList.Web/README.md)
 
 
 # BackEnd
