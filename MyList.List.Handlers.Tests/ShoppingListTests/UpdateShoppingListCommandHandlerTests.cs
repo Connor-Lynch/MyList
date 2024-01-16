@@ -45,35 +45,45 @@ namespace MyList.List.Handlers.Tests
         }
 
         [TestMethod]
-        public async Task HandlerShouldUpdateShoppingListAndReturnIt()
+        public async Task Handle_UpdateShoppingList_ReturnsUpdatedList()
         {
+            // Act
             var result = await _handler.Handle(_command, new CancellationToken());
 
+            // Assert
             Assert.IsInstanceOfType(result, typeof(ShoppingList));
         }
 
         [TestMethod]
-        public async Task HandlerShouldUpdateShoppingListInShoppingListRepository()
+        public async Task Handle_UpdateShoppingList_UpdatesShoppingListInShoppingListRepository()
         {
+            // Act
             var result = await _handler.Handle(_command, new CancellationToken());
 
+            // Assert
             _shoppingListRepository.Verify(r => r.UpdateName(It.IsAny<Guid>(), It.IsAny<string>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task HandlerShouldSaveChangesInDB()
+        public async Task Handle_UpdateShoppingList_SavesChangesInDB()
         {
+            // Act
             var result = await _handler.Handle(_command, new CancellationToken());
 
+            // Assert
             _unitOfWork.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task HandlerShouldReturnNullIfShoppingListDoesNotExist()
+        public async Task Handle_ShoppingListDoesNotExist_ReturnsNull()
         {
+            // Arrange
             _command.Id = Guid.NewGuid();
+
+            // Act
             var result = await _handler.Handle(_command, new CancellationToken());
 
+            // Assert
             Assert.IsNull(result);
         }
     }

@@ -40,19 +40,23 @@ namespace MyList.List.Handlers.Tests
         }
 
         [TestMethod]
-        public async Task HandlerShouldReturnAListOfLists()
+        public async Task Handler_GetAllLists_ReturnsAListOfLists()
         {
+            // Act
             var result = await _handler.Handle(_request, new CancellationToken());
 
+            // Assert
             Assert.IsInstanceOfType(result, typeof(IQueryable<ShoppingList>));
             Assert.AreEqual(result.Count(), 2);
         }
 
         [TestMethod]
-        public async Task HandlerShouldGetShoppingListsFromRepository()
+        public async Task Handler_GetAllLists_InvokesShoppingListRepository()
         {
+            // Act
             var result = await _handler.Handle(_request, new CancellationToken());
 
+            // Assert
             _shoppingListRepository.Verify(r => r.GetAll(), Times.Once);
         }
     }

@@ -37,27 +37,35 @@ namespace MyList.List.Handlers.Tests
         }
 
         [TestMethod]
-        public async Task HandlerShouldReturnShoppingListById()
+        public async Task Handler_GetShoppingList_ReturnsShoppingListById()
         {
+            // Act
             var result = await _handler.Handle(_request, new CancellationToken());
 
+            // Assert
             Assert.IsInstanceOfType(result, typeof(ShoppingList));
         }
 
         [TestMethod]
-        public async Task HandlerShouldGetShoppingListFromRepository()
+        public async Task Handler_GetShoppingList_GetsShoppingListFromRepository()
         {
+            // Act
             var result = await _handler.Handle(_request, new CancellationToken());
 
+            // Assert
             _shoppingListRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task HandlerShouldReturnNullIfShoppingListIsNotFound()
+        public async Task Handler_NoListFound_ReturnsNull()
         {
+            // Arrange
             _request.Id = Guid.NewGuid();
+
+            // Act
             var result = await _handler.Handle(_request, new CancellationToken());
 
+            // Assert
             Assert.IsNull(result);
         }
     }

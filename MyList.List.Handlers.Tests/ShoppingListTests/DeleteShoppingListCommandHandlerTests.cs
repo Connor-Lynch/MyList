@@ -42,26 +42,32 @@ namespace MyList.List.Handlers.Tests
         }
 
         [TestMethod]
-        public async Task HandlerShouldDeleteShoppingListAndReturnIt()
+        public async Task Handle_ShouldDeleteShoppingList_ReturnsList()
         {
+            // Act
             var result = await _handler.Handle(_command, new CancellationToken());
 
+            // Assert
             Assert.IsInstanceOfType(result, typeof(ShoppingList));
         }
 
         [TestMethod]
-        public async Task HandlerShouldDeleteShoppingListInShoppingListRepository()
+        public async Task Handler_ShouldDeleteShoppingList_InvokesShoppingListRepository()
         {
+            // Act
             var result = await _handler.Handle(_command, new CancellationToken());
 
+            // Assert
             _shoppingListRepository.Verify(r => r.Delete(It.IsAny<Guid>()), Times.Once);
         }
 
         [TestMethod]
-        public async Task HandlerShouldSaveChangesInDB()
+        public async Task Handler_Success_ShouldSaveChangesInDB()
         {
+            // Act
             var result = await _handler.Handle(_command, new CancellationToken());
 
+            // Assert
             _unitOfWork.Verify(u => u.SaveEntitiesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }
