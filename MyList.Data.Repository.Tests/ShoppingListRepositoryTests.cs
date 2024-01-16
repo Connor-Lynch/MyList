@@ -30,7 +30,7 @@ namespace MyList.Data.Repository.Tests
         [TestMethod]
         public async Task GetAllShouldReturnACollectionOfShoppingLists()
         {
-            var shoppingListsToSeed = new List<object>()
+            var shoppingListsToSeed = new List<ShoppingList>()
             {
                 ShoppingListBuilder.Create().Build(),
                 ShoppingListBuilder.Create().Build()
@@ -47,7 +47,7 @@ namespace MyList.Data.Repository.Tests
         [TestMethod]
         public async Task GetAllShouldReturnACollectionOfShoppingListsOrderByDateWithTheNewestFirst()
         {
-            var shoppingListsToSeed = new List<object>()
+            var shoppingListsToSeed = new List<ShoppingList>()
             {
                 ShoppingListBuilder.Create().WithCreatedDate(DateTime.Now.AddMinutes(-1)).Build(),
                 ShoppingListBuilder.Create().WithName("Oldest").WithCreatedDate(DateTime.Now.AddDays(-1)).Build(),
@@ -65,7 +65,7 @@ namespace MyList.Data.Repository.Tests
         [TestMethod]
         public async Task GetAllShouldReturnACollectionOfShoppingListsWithItems()
         {
-            var shoppingListsToSeed = new List<object>()
+            var shoppingListsToSeed = new List<ShoppingList>()
             {
                 ShoppingListBuilder.Create().Build(),
                 ShoppingListBuilder.Create().Build()
@@ -88,7 +88,7 @@ namespace MyList.Data.Repository.Tests
                 ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
             };
 
-            var shoppingListsToSeed = new List<object>()
+            var shoppingListsToSeed = new List<ShoppingList>()
             {
                 ShoppingListBuilder.Create().WithItems(shoppingListItem).Build()
             };
@@ -106,7 +106,7 @@ namespace MyList.Data.Repository.Tests
         {
             var expectedShoppingListResult = ShoppingListBuilder.Create().Build();
 
-            var shoppingListsToSeed = new List<object>()
+            var shoppingListsToSeed = new List<ShoppingList>()
             {
                 expectedShoppingListResult,
                 ShoppingListBuilder.Create().Build()
@@ -124,7 +124,7 @@ namespace MyList.Data.Repository.Tests
         {
             var expectedShoppingListResult = ShoppingListBuilder.Create().Build();
 
-            var shoppingListsToSeed = new List<object>()
+            var shoppingListsToSeed = new List<ShoppingList>()
             {
                 expectedShoppingListResult,
                 ShoppingListBuilder.Create().Build()
@@ -147,7 +147,7 @@ namespace MyList.Data.Repository.Tests
                 ShoppingListItemBuilder.Create().WithSortOrder(1).Build()
             };
             var expectedShoppingListResult = ShoppingListBuilder.Create().WithItems(shoppingListItem).Build();
-            var shoppingListsToSeed = new List<object>()
+            var shoppingListsToSeed = new List<ShoppingList>()
             {
                 expectedShoppingListResult,
                 ShoppingListBuilder.Create().WithItems(shoppingListItem).Build()
