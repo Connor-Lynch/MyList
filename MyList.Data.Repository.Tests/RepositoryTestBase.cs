@@ -33,7 +33,7 @@ namespace MyList.Data.Repository.Tests
             _context.SaveChanges();
         }
 
-        public void SeedMany(List<object> items)
+        public void SeedMany<T>(List<T> items) where T : class
         {
             items.ForEach(i => Seed(i));
         }
