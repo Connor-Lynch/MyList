@@ -9,7 +9,7 @@ I build the web UI in both Angular and React(NextJS). You can read more about th
 
 # BackEnd
 
-The back end for this project is a `.net core 3.1` web api that uses `Entity Framework Core` to manage its persistence. The project is architected using the mediator pattern.
+The back end for this project is a `.net 8` web api that uses `Entity Framework Core` to manage its persistence. The project is architected using the mediator pattern.
 
 ## Project Structure
 
